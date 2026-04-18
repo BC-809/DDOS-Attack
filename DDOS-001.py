@@ -23,8 +23,8 @@ print("Author    : HA-MRX")
 print("github    : https://github.com/Ha3MrX")
 print("")
 
-ip = input("IP Target : ")
-port = int(input("Port       : "))
+ip = input("IP Target : ▓▓▓▓▓")
+port = int(input("Port       : ▓▓▓▓▓"))
 
 os.system("clear")
 os.system("figlet Attack Starting")
