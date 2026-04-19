@@ -5,7 +5,7 @@ import socket
 import random
 from datetime import datetime
 
-MAX_PACKETS = 1000
+MAX_PACKETS = 999999999
 
 now = datetime.now()
 hour = now.hour
@@ -30,15 +30,15 @@ port = int(input("Port       : "))
 
 os.system("clear")
 os.system("figlet Attack Starting")
-print("[                    ] 0% ")
+print("[                                  ] 0% ")
 time.sleep(2)
-print("[=====               ] 25%")
+print("[▓▓▓▓▓▓                        ] 25%")
 time.sleep(2)
-print("[==========          ] 50%")
+print("[▓▓▓▓▓▓▓▓▓▓                 ] 50%")
 time.sleep(2)
-print("[===============     ] 75%")
+print("[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓         ] 75%")
 time.sleep(2)
-print("[====================] 100%")
+print("[▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%")
 time.sleep(1)
 
 sent = 0
