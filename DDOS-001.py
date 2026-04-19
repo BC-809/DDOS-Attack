@@ -5,6 +5,8 @@ import socket
 import random
 from datetime import datetime
 
+MAX_PACKETS = 1000  # 安全限制
+
 now = datetime.now()
 hour = now.hour
 minute = now.minute
