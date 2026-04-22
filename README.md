@@ -8,20 +8,14 @@ from banks to news websites, and present a major challenge to making sure people
 
 ### Dwonload&Install
 
-### git clone https://github.com/Ha3MrX/DDos-Attack
+### git clone https://github.com/BC-809/-Distribute-Denial-of-Server-Attack..git
 
 ### cd DDos-Attack
 
-### chmod +x ddos-attack.py
+### chmod +x DDOS-Attack_01.py
 
-### python ddos-attack.py
+### python DDOS-Attack_01.py
 
-### ScreenShot 
+### wait for two minutes
 
-### YouTube channel
-
-https://www.youtube.com/channel/UCCgy7i_A5yhAEdY86rPOinA
-
-### Video Tutorial
-
-https://www.youtube.com/watch?v=-e3Iia_P7rA
+### DDOS-Attack is starting !
