@@ -5,7 +5,7 @@ import socket
 import random
 from datetime import datetime
 
-MAX_PACKETS = 999999999
+MAX_PACKETS = 100
 
 now = datetime.now()
 hour = now.hour
