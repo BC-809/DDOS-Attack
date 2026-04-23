@@ -8,7 +8,7 @@ from banks to news websites, and present a major challenge to making sure people
 
 ### Dwonload&Install
 
-### git clone https://github.com/BC-809/-Distribute-Denial-of-Server-Attack..git
+### git clone https://github.com/BC-809/DDOS-Attack.git
 
 ### cd DDos-Attack
 
