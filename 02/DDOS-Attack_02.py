@@ -18,8 +18,8 @@ bytes = random._urandom(1490)
 #############
 
 os.system("clear")
-os.system("figlet DDos Attack")
-print("Author    : HA-MRX")
+os.system("figlet DDOS-Attack")
+print("Author    : BC-U809")
 print("github    : https://github.com/Ha3MrX")
 print("")
 
