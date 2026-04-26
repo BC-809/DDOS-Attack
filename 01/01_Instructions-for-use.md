@@ -1,4 +1,4 @@
-### Dwonload&Install
+### Dwonload&Instally
 
 ### git clone https://github.com/BC-809/DDOS-Attack.git
 
