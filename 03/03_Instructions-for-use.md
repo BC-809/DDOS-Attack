@@ -1,4 +1,4 @@
-### Dwonload&Install0
+### Dwonload&Install
 
 ### git clone https://github.com/Ha3MrX/DDos-Attack
 
