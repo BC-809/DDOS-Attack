@@ -21,7 +21,7 @@ bytes = random._urandom(1490)
 
 os.system("clear")
 os.system("figlet DDOS-Attack")
-print("Author    : BC-U")
+print("Author    : BC-U809")
 print("github    : https://github.com/BC-809/DDOS-Attack.git")
 print("")
 
