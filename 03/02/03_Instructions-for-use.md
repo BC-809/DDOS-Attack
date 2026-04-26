@@ -7,3 +7,7 @@
 ### chmod +x ddos-attack.py
 
 ### python ddos-attack.py
+
+### wait for some minters
+
+### DDOS-Attack is starting !
