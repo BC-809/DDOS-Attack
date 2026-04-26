@@ -1,4 +1,4 @@
-# From https://github.com/Ha3MrX/DDos-Attack0
+# From https://github.com/Ha3MrX/DDos-Attack
 
 ### Dwonload&Install
 
