@@ -8,6 +8,6 @@
 
 ### python ddos-attack.py
 
-### wait for some minters
+### wait for some minutes
 
 ### DDOS-Attack is starting !
