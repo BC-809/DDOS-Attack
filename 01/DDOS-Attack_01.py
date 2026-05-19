@@ -24,9 +24,9 @@ print("GitHub    : https://github.com/BC-809/DDOS-Attack.git")
 print("Wraning   : Never use these techniques against unauthorised targets. Understanding attack vectors is the first step to building better defences. Use this knowledge responsibly.")
 print("")
 
-ip = input("IP Target : ")
-port = int(input("Port       : "))
-max_packets = int(input("Max Packets: "))
+ip = input("IP Target   : ")
+port = int(input("Port         : "))
+max_packets = int(input("Max Packets : "))
 
 os.system("clear")
 os.system("figlet Attack Starting")
