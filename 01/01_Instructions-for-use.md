@@ -2,9 +2,9 @@ Tutorial: Running a DDoS Simulation on Android with Termux + Kali Linux (via pro
 
 🚨 Strict Legal & Ethical Warning
 
-This guide is for educational purposes only. It demonstrates how to set up a testing environment to understand how DDoS tools work so you can better defend against them.
+This guide is for educational purposes only. It demonstrates how to set up a testing environment to understand how DDOS tools work so you can better defend against them.
 
-Launching a DDoS attack against any network, server, or website you do not own and have explicit written permission to test is a serious crime.
+Launching a DDOS attack against any network, server, or website you do not own and have explicit written permission to test is a serious crime.
 
 Only run these commands and scripts on your own isolated lab environment (e.g. a local virtual machine).
 
