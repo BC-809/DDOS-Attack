@@ -21,6 +21,7 @@ os.system("clear")
 os.system("figlet DDOS-Attack")
 print("Author    : BC-U809")
 print("github    : https://github.com/BC-809/DDOS-Attack.git")
+print("Wraning:")
 print("")
 
 ip = input("IP Target : ")
