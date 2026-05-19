@@ -21,6 +21,7 @@ os.system("clear")
 os.system("figlet DDOS-Attack")
 print("Author    : BC-U809")
 print("github    : https://github.com/BC-809/DDOS-Attack.git")
+print("Wraning   : Never use these techniques against unauthorised targets. Understanding attack vectors is the first step to building better defences. Use this knowledge responsibly.")
 print("")
 
 ip = input("IP Target : ")
