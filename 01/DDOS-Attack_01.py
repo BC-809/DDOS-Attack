@@ -18,7 +18,8 @@ data = random._urandom(1490)
 #############
 
 os.system("clear")
-print("")
+print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809")
+print("
 
 os.system("clear")
 os.system("figlet DDOS-Attack")
