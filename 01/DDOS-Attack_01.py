@@ -34,7 +34,7 @@ print("M        MM M        MM MMM     MMM MM       MM   BC-809")
 time.sleep(2)
 print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809")
 time.sleep(2)
-print("Wraning:Never use these techniques against unauthorised targets. Understanding attack vectors is the first step to building better defences. Use this knowledge responsibly.")
+print("Warning:Never use these techniques against unauthorised targets. Understanding attack vectors is the first step to building better defences. Use this knowledge responsibly.")
 time.sleep(1)
 
 os.system("clear")
