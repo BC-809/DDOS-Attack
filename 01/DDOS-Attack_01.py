@@ -34,7 +34,9 @@ print("M        MM M        MM MMM     MMM MM       MM   BC-809")
 time.sleep(2)
 print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809")
 time.sleep(2)
-print("Warning:Never use these techniques against unauthorised targets. Understanding attack vectors is the first step to building better defences. Use this knowledge responsibly.")
+print("Warning: Never use these techniques against unauthorised targets. "
+      "Understanding attack vectors is the first step to building better defences. "
+      "Use this knowledge responsibly.")
 time.sleep(1)
 
 os.system("clear")
@@ -46,6 +48,24 @@ print("")
 ip = input("IP Target : ")
 port = int(input("Port       : "))
 max_packets = int(input("Max Packets : "))
+
+# ---------- Target reachability check ----------
+def check_target(ip, port):
+    """Try a TCP connection, return True if successful, else False."""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(3)
+        s.connect((ip, port))
+        s.close()
+        return True
+    except (socket.timeout, ConnectionRefusedError, OSError):
+        return False
+
+print("[*] Checking target...")
+if not check_target(ip, port):
+    print("DDOS-Attack------ERROR")
+    sys.exit(1)
+# ----------------------------------------------
 
 os.system("clear")
 os.system("figlet Attack Starting")
