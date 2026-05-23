@@ -12,7 +12,7 @@
 
 ## 项目简介
 
-`DDOS-Attack` 是一个基于 Python 的 DDOS 模拟脚本，能够向指定 IP 和端口发送 UDP 洪水数据包。
+- `DDOS-Attack` 是一个基于 Python 的 DDOS 模拟脚本，能够向指定 IP 和端口发送 UDP 洪水数据包。
 
 ---
 
