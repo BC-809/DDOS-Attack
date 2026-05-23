@@ -31,3 +31,11 @@
 #### │ └── 01_Instructions-for-use.bat → Cmd运行文件(一键安装所需文件并启动)
 #### ├── Nameplate → DDOS艺术字体
 #### └── README.md → 介绍
+
+---
+
+## 💻 环境要求
+
+- **Python 3.6+**（推荐 3.9+）
+- 操作系统：Linux、Windows、macOS、Android（Termux）
+- 可选工具：`git` 用于克隆仓库，`figlet` 用于生成艺术字标题
