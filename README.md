@@ -12,14 +12,13 @@
 
 ## 📖 项目简介
 
-`DDOS-Attack` 是一个基于 Python 的 DDoS 模拟脚本，能够向指定 IP 和端口发送 UDP 洪水数据包。它最初是为在安卓 Termux 环境中运行而设计，但同样支持 Windows、Linux 和 macOS。
+`DDOS-Attack` 是一个基于 Python 的 DDOS 模拟脚本，能够向指定 IP 和端口发送 UDP 洪水数据包。
 
 ### 主要特性
 - 简洁的命令行交互界面
 - 可自定义目标 IP、端口和发包数量
 - 攻击前自动检测目标可达性（避免无效攻击）
 - 保留艺术字启动界面（需要 `figlet` 支持）
-- 跨平台支持（Termux、Kali Linux、Windows 等）
 
 ---
 
