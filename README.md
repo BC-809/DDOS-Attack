@@ -27,6 +27,7 @@
 ## 项目结构
 #### ├── DDOS/
 #### │ └── DDOS-Attack_01.py → 攻击代码文件
+#### │ └── DDOS-Attack_02.py → 快速版(省去了艺术字体加载)
 #### │ └── 01_Instructions-for-use.bat → Cmd运行文件(一键安装所需文件并启动)
 #### ├── Nameplate → DDOS艺术字体
 #### └── README.md → 介绍
