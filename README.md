@@ -22,10 +22,3 @@
 
 ---
 
-> **🏗️ 项目结构**
-> **DDOS-Attack/**
-> **├── DDOS/**
-> **│ └── DDOS-Attack_01.py ← 核心攻击脚本**
-> **│ └──01_Instructions-for-use.bat**
-> **├── Nameplate ← 艺术字文本**
-> **└── README.md ← 介绍**
