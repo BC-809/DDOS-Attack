@@ -39,4 +39,4 @@
 
 - **Python 3.6+**（推荐 3.9+）
 - 操作系统：Linux、Windows、macOS、Android（Termux）
-- 可选工具：`git` 用于克隆仓库，`figlet` 用于生成艺术字标题
+- 依赖工具：`git` 用于克隆仓库，`figlet` 用于生成艺术字标题
