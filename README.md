@@ -1,5 +1,26 @@
-# Distribute-Denial-of-Server-Attack
+# DDOS-Attack - 分布式拒绝服务攻击模拟工具
 
-### Distribute-Denial-of-Server-Attack(DDOS-Attack) is an attempt to make an online service unavailable 
-by overwhelming it with traffic from multiple sources. They target a wide variety of important resources
-from banks to news websites, and present a major challenge to making sure people can publish and access important information
+> **🚨 严格的法律与道德警告**
+> 
+> **本项目仅用于教育目的！** 它旨在帮助安全研究人员、网络管理员和学生理解 DDoS 攻击的原理，以便更好地设计防御策略。
+> 
+> **未经授权对任何非你个人拥有的服务器、网络或设备发起攻击是严重的犯罪行为，将受到法律严惩。**
+> 
+> **请确保你只在拥有完全控制权的隔离实验环境（例如本地虚拟机、自建测试网络）中运行此代码。** 作者对任何不当使用不承担任何责任。
+
+---
+
+## 📖 项目简介
+
+`DDOS-Attack` 是一个基于 Python 的 DDoS 模拟脚本，能够向指定 IP 和端口发送 UDP 洪水数据包。它最初是为在安卓 Termux 环境中运行而设计，但同样支持 Windows、Linux 和 macOS。
+
+### 主要特性
+- 简洁的命令行交互界面
+- 可自定义目标 IP、端口和发包数量
+- 攻击前自动检测目标可达性（避免无效攻击）
+- 保留艺术字启动界面（需要 `figlet` 支持）
+- 跨平台支持（Termux、Kali Linux、Windows 等）
+
+---
+
+## 🏗️ 项目结构
