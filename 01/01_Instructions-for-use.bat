@@ -1,7 +1,7 @@
 @echo off
-title DDOS-Attack Environment Setup
+title DDOS-Attack Environment Setup & Run
 echo ================================================================
-echo  DDOS-Attack Educational Setup Script
+echo  DDOS-Attack Educational Setup & Run
 echo  WARNING: Use only in isolated lab with your own devices!
 echo ================================================================
 pause
@@ -33,11 +33,14 @@ echo [*] Adding firewall rule for Python...
 set PYTHON_EXE=%LOCALAPPDATA%\Programs\Python\Python312\python.exe
 netsh advfirewall firewall add rule name="Python DDoS Test" dir=out action=allow program="%PYTHON_EXE%" enable=yes
 
-:: 7. Done
+:: 7. Run the attack script
 echo.
 echo ================================================================
-echo  Setup complete!
-echo  To run the script, open cmd in this folder and type:
-echo    python 01/DDOS-Attack_01.py
+echo  Setup complete! Launching DDOS-Attack script...
 echo ================================================================
+python 01/DDOS-Attack_01.py
+
+:: If the above command fails, try using the full Python path:
+:: "%PYTHON_EXE%" 01/DDOS-Attack_01.py
+
 pause
