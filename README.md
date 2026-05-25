@@ -30,6 +30,7 @@
 - │ └── DDOS-Attack_02.py → 快速版(省去了艺术字体加载)
 - │ └── 01_UseCmd.bat → Cmd 运行文件(运行时安装所需文件并启动 01)
 - │ └── 01_UsePython.py → Python 运行文件(运行时安装所需文件并启动 01)
+- │ └── 01_UseLinux → Linux 运行文件(运行时安装所需文件并启动 01)
 - ├── Art/
 - │ └── Nameplate → DDOS艺术字体
 - │ └── Figlet → 代码中生成的 figlet 字体预览
