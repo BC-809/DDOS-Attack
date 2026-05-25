@@ -21,7 +21,7 @@ class DDoSSimulator:
         print("=" * 60)
         print("  DDOS-Attack 教育版 UDP 数据包发送器 v2.0")
         print("=" * 60)
-        print("⚠️  法律警告：")
+        print("法律警告：")
         print("本工具仅用于教育目的。")
         print("你只能在你拥有并完全隔离的实验环境中使用。")
         print("未经授权的攻击是严重的犯罪行为。")
