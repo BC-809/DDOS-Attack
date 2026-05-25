@@ -1,14 +1,3 @@
-#!/usr/bin/env python3
-"""
-DDOS-Attack_02 - UDP 数据包发送演示 (升级版)
-版本: 2.0
-原始文件: DDOS-Attack_02.py
-
-功能: 向指定 IP 和端口发送 UDP 数据包，用于理解网络压力测试原理。
-警告: 仅限在完全隔离、拥有授权的实验环境中使用。
-未经授权攻击他人网络是严重的犯罪行为。
-"""
-
 import sys
 import os
 import time
