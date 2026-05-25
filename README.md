@@ -28,7 +28,7 @@
 - ├── DDOS/
 - │ └── DDOS-Attack_01.py → 攻击代码文件
 - │ └── DDOS-Attack_02.py → 教育版(省去了艺术字体加载)
-- │ └── 01_UseCmd.bat → Windows 运行文件(运行时安装所需文件并启动 01)
+- │ └── 01_UseWindows.bat → Windows 运行文件(运行时安装所需文件并启动 01)
 - │ └── 01_UsePython.py → Python 运行文件(运行时安装所需文件并启动 01)
 - │ └── 01_UseLinux → Linux 运行文件(运行时安装所需文件并启动 01)
 - ├── Art/
