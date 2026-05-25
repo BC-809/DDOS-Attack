@@ -18,6 +18,27 @@ data = random.urandom(1490)
 #############
 
 os.system("clear")
+print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809")
+print("M       MMM M       MMM MMM     MMM MM       MM   BC-809")
+print("M  MMMM   M M  MMMM   M M   MMM   M M  MMMMM  M   BC-809")
+print("M  MMMMM  M M  MMMMM  M M  MMMMM  M M        MM   BC-809")
+print("M  MMMMM  M M  MMMMM  M M  MMMMM  M MMMMMMM   M   BC-809")
+print("M  MMMM   M M  MMMM   M M   MMM   M M   MMM   M   BC-809")
+print("M        MM M        MM MMM     MMM MM       MM   BC-809")
+print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809")
+print("严重警告")
+print("你已经触碰到了法律和道德边缘，如果你不想被人唾弃或者坐牢，请立即退出")
+time.sleep(1)
+print("3")
+time.sleep(1)
+print("2")
+time.sleep(1)
+print("1")
+time.sleep(1)
+print("Starting...")
+time.sleep(2)
+
+os.system("clear")
 os.system("figlet DDOS-Attack")
 print("Author    : BC-U809")
 print("GitHub    : https://github.com/BC-809/DDOS-Attack.git")
@@ -44,19 +65,6 @@ if not check_target(ip, port):
     print("DDOS-Attack------ERROR")
     sys.exit(1)
 # ----------------------------------------------
-
-os.system("clear")
-print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809")
-print("M       MMM M       MMM MMM     MMM MM       MM   BC-809")
-print("M  MMMM   M M  MMMM   M M   MMM   M M  MMMMM  M   BC-809")
-print("M  MMMMM  M M  MMMMM  M M  MMMMM  M M        MM   BC-809")
-print("M  MMMMM  M M  MMMMM  M M  MMMMM  M MMMMMMM   M   BC-809")
-print("M  MMMM   M M  MMMM   M M   MMM   M M   MMM   M   BC-809")
-print("M        MM M        MM MMM     MMM MM       MM   BC-809")
-print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809")
-print("严重警告")
-print("你已经触碰到了法律和道德边缘，如果你不想被人唾弃或者坐牢，请立即退出")
-time.sleep(3)
 
 sent = 0
 while sent < max_packets:
