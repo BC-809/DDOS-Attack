@@ -16,12 +16,12 @@ class DDoSSimulator:
         self.rate_limit = 0.0
 
         # 绕过选项
-        self.source_port = None      # 指定源端口，None 表示随机
+        self.source_port = None          # 指定源端口，None 表示随机
         self.use_fragmentation = False   # 是否启用 IP 分片
         self.random_target_port = False  # 是否随机化目标端口
 
         self.sock = None
-        self.payload_size = 1490     # 默认单包载荷大小
+        self.payload_size = 1490         # 默认单包载荷大小
         self.payload = None
 
     def show_banner(self):
@@ -30,7 +30,7 @@ class DDoSSimulator:
         print("=" * 60)
         print("  DDOS-Attack 教育版 (防火墙绕过实验) v3.0")
         print("=" * 60)
-        print("法律警告：")
+        print("⚠️  法律警告：")
         print("本工具仅用于教育目的，必须在完全隔离的实验室环境中使用。")
         print("你只能攻击自己拥有合法授权的设备。")
         print("未经授权的攻击是严重的犯罪行为，将承担法律责任。")
@@ -43,7 +43,7 @@ class DDoSSimulator:
         while True:
             try:
                 ip_str = input("请输入目标 IP 地址: ").strip()
-                ipaddress.ip_address(ip_str)   # 验证合法
+                ipaddress.ip_address(ip_str)   # 验证合法性
                 self.target_ip = ip_str
                 break
             except ValueError:
@@ -191,16 +191,16 @@ class DDoSSimulator:
         self.show_banner()
         self.get_target_info()
 
-# 最终确认
-while True:
-    confirm = input("\n[!] 最后警告：你即将向目标发送大量 UDP 流量。请确认 (yes/no): ").strip().lower()
-    if confirm == 'yes':
-        break
-    elif confirm == 'no':
-        print("[*] 用户取消。")
-        sys.exit(0)
-    else:
-        print("[!] 请输入 yes 或 no。")
+        # 最终确认
+        while True:
+            confirm = input("\n[!] 最后警告：你即将向目标发送大量 UDP 流量。请确认 (yes/no): ").strip().lower()
+            if confirm == 'yes':
+                break
+            elif confirm == 'no':
+                print("[*] 用户取消。")
+                sys.exit(0)
+            else:
+                print("[!] 请输入 yes 或 no。")
 
         # 连通性检查（可跳过）
         print("\n[*] 正在检查目标 TCP 连通性...")
