@@ -128,11 +128,15 @@ if not check_target(target_ip, target_port):
         sys.exit(1)
 
 # 最终确认
-print("\n[!] 最后警告：你即将向目标发送大量 UDP 流量。")
-confirm = input("你是否确认这是你拥有完全授权的隔离设备？(yes/no): ").strip().lower()
-if confirm != 'yes':
-    print("[*] 用户取消。")
-    sys.exit(0)
+while True:
+    confirm = input("\n[!] 最后警告：你即将向目标发送大量 UDP 流量。请确认 (yes/no): ").strip().lower()
+    if confirm == 'yes':
+        break
+    elif confirm == 'no':
+        print("[*] 用户取消。")
+        sys.exit(0)
+    else:
+        print("[!] 请输入 yes 或 no。")
 
 # ==================== 攻击发送循环 ====================
 
