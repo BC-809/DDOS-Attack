@@ -6,7 +6,7 @@ import ipaddress
 import random
 
 class DDoSSimulator:
-    """UDP 数据包发送模拟器（含绕过选项）"""
+    """UDP 数据包发送模拟器"""
 
     def __init__(self):
         self.target_ip = None
@@ -191,12 +191,16 @@ class DDoSSimulator:
         self.show_banner()
         self.get_target_info()
 
-        # 最终确认
-        print("\n[!] 最后警告：你即将向目标发送大量 UDP 流量。")
-        confirm = input("你是否确认这是你拥有并完全隔离的实验环境？(yes/no): ").strip().lower()
-        if confirm != 'yes':
-            print("[*] 用户取消。")
-            sys.exit(0)
+# 最终确认
+while True:
+    confirm = input("\n[!] 最后警告：你即将向目标发送大量 UDP 流量。请确认 (yes/no): ").strip().lower()
+    if confirm == 'yes':
+        break
+    elif confirm == 'no':
+        print("[*] 用户取消。")
+        sys.exit(0)
+    else:
+        print("[!] 请输入 yes 或 no。")
 
         # 连通性检查（可跳过）
         print("\n[*] 正在检查目标 TCP 连通性...")
