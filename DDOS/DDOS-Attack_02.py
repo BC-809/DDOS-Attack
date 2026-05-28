@@ -69,7 +69,7 @@ class DDoSSimulator:
                 self.total_gb = float(gb_str)
                 if self.total_gb <= 0:
                     print("[!] 流量必须大于 0 GB。")
-                    continuee
+                    continue
                 break
             except ValueError:
                 print("[!] 无效的数值，请输入数字。")
