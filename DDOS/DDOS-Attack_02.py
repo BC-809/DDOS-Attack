@@ -30,7 +30,7 @@ class DDoSSimulator:
         print("=" * 60)
         print("  DDOS-Attack 教育版 (防火墙绕过实验) v3.0")
         print("=" * 60)
-        print("⚠️  法律警告：")
+        print("法律警告：")
         print("本工具仅用于教育目的，必须在完全隔离的实验室环境中使用。")
         print("你只能攻击自己拥有合法授权的设备。")
         print("未经授权的攻击是严重的犯罪行为，将承担法律责任。")
@@ -69,7 +69,7 @@ class DDoSSimulator:
                 self.total_gb = float(gb_str)
                 if self.total_gb <= 0:
                     print("[!] 流量必须大于 0 GB。")
-                    continue
+                    continuee
                 break
             except ValueError:
                 print("[!] 无效的数值，请输入数字。")
