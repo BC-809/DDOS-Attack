@@ -38,7 +38,7 @@ echo.
 echo ================================================================
 echo  Setup complete! Launching DDOS-Attack script...
 echo ================================================================
-python 01/DDOS-Attack_01.py
+python DDOS/DDOS-Attack_01.py
 
 :: If the above command fails, try using the full Python path:
 :: "%PYTHON_EXE%" 01/DDOS-Attack_01.py
