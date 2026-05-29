@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-"""
-DDOS-Attack 自动化部署与运行脚本 (Windows)
-仅用于教育目的，必须在隔离的自有实验环境中使用！
-未经授权攻击他人网络是犯罪行为。
-"""
-
 import subprocess
 import sys
 import os
@@ -20,8 +13,8 @@ def run_cmd(command, shell=True):
 
 def main():
     print("=" * 60)
-    print("  DDOS-Attack 教育版自动部署脚本 (Python)")
-    print("  ⚠️  警告：仅限在隔离实验室环境中使用！")
+    print("  DDOS-Attack 自动部署脚本 (Python)")
+    print("  警告：仅限在隔离实验室环境中使用！")
     print("=" * 60)
     input("按 Enter 继续，或 Ctrl+C 退出...")
 
@@ -61,7 +54,7 @@ def main():
     print("\n" + "=" * 60)
     print("  部署完成，即将启动 DDOS-Attack 脚本...")
     print("=" * 60)
-    run_cmd("python 01/DDOS-Attack_01.py")
+    run_cmd("python DDOS/DDOS-Attack_01.py")
 
 if __name__ == "__main__":
     main()
