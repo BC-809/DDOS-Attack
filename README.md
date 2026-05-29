@@ -27,7 +27,7 @@
 ## 项目结构
 - ├── DDOS/
 - │ └── DDOS-Attack_01.py → 攻击代码文件
-- │ └── DDOS-Attack_02.py → 教育版(省去了艺术字体加载)
+- │ └── DDOS-Attack_02.py → 快捷版(省去了艺术字体加载)
 - │ └── DDOS-Attack_03.py → 可伪造源 IP 的版本(需要 ROOT 权限)
 - ├── Launcher/
 - │ └── 01_UseWindows.bat → Windows 运行文件(运行时安装所需文件并启动 01)
