@@ -127,6 +127,9 @@ if not check_target(target_ip, target_port):
     if choice != 'y':
         sys.exit(1)
 
+os.system("clear")
+os.system("figlet Attack Starting")
+
 # 最终确认
 while True:
     confirm = input("\n[!] 最后警告：你即将向目标发送大量 UDP 流量。请确认 (yes/no): ").strip().lower()
