@@ -1,4 +1,4 @@
-**中文** ([简体](C-README.md))
+([中文](C-README.md))
 
 # DDOS-Attack - Distributed Denial of Service Attack Simulation Tool
 
