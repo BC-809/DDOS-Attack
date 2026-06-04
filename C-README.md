@@ -1,3 +1,5 @@
+# [English](README_zh_Hant.md)
+
 # DDOS-Attack    分布式拒绝服务攻击模拟工具
 
 ## 严格的法律与道德警告
