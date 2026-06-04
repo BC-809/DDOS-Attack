@@ -1,4 +1,4 @@
-# [English](README_zh_Hant.md)
+# [English](README_English.md)
 
 # DDOS-Attack    分布式拒绝服务攻击模拟工具
 
