@@ -1,4 +1,4 @@
-# [English](README.md)
+[English](README.md)
 
 # DDOS-Attack    分布式拒绝服务攻击模拟工具
 
