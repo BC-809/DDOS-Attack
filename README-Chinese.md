@@ -38,7 +38,9 @@
 - ├── Art/
 - │ └── Nameplate → DDOS艺术字体
 - │ └── Figlet → 代码中生成的 figlet 字体预览
-- └── README.md → 介绍
+- └── README.md → 英文介绍
+- └── README–Chinese.md → 中文介绍
+- └── LICENSE → 来源许可
 
 ---
 
