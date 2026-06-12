@@ -1,53 +1,54 @@
 [中文](README-Chinese.md)
 
-# DDOS-Attack – Distributed Denial of Service Simulation Tool
+# DDOS-Attack - Distributed Denial of Service Attack Simulation Tool
 
 ## Strict Legal & Ethical Warning
 
-- **This project is for educational purposes only!** It is intended to help security researchers, network administrators, and students understand the principles of DDoS attacks in order to design better defense strategies.
+- **This project is for educational purposes only!** It is designed to help security researchers, network administrators, and students understand the principles of DDoS attacks in order to better design defense strategies.
 
-- **Launching an attack against any server, network, or device that you do not personally own, without authorization, is a serious criminal offense and will be severely punished by law.**
+- **Unauthorized attacks against any server, network, or device that you do not personally own are serious criminal offenses and will be punished by law.**
 
-- **Please ensure that you only run this code in an isolated, controlled laboratory environment (e.g., local virtual machines, private test networks) that you fully control.** The author assumes no responsibility for any misuse.
+- **Please ensure that you only run this code in a completely controlled, isolated lab environment (such as a local virtual machine or a self-built test network).** The author assumes no responsibility for any misuse.
 
 ---
 
-## Project Description
+## Project Introduction
 
-- `DDOS-Attack` is a Python‑based DDoS simulation script that sends UDP flood packets to a specified IP address and port.
+- `DDOS-Attack` is a Python-based DDoS simulation script capable of sending UDP flood packets to a specified IP address and port.
 
 ---
 
 ## Key Features
-- Clean command‑line interactive interface
-- Customizable target IP, port, and total traffic volume
-- Automatic reachability check before launching the attack (avoids useless attacks)
-- Retains an ASCII art startup screen (requires `figlet` support)
+- Simple command-line interactive interface
+- Customizable target IP, port, and number of packets to send
+- Automatic target reachability check before attack (to avoid ineffective attacks)
+- Retains ASCII art startup banner (requires `figlet` support)
 
 ---
 
 ## Project Structure
 - ├── DDOS/
-- │ └── DDOS-Attack_01.py → Main attack code
-- │ └── DDOS-Attack_02.py → Lightweight version (no art fonts)
-- │ └── DDOS-Attack_03.py → Source‑IP spoofing version (requires ROOT privileges)
+- │ └── DDOS-Attack_01.py → Attack code file
+- │ └── DDOS-Attack_02.py → Quick version (skips ASCII art loading)
+- │ └── DDOS-Attack_03.py → Version with spoofed source IP support (requires ROOT privileges)
 - ├── Launcher/
-- │ └── 01_UseWindows.bat → Windows runner (installs dependencies and launches 01)
-- │ └── 01_UsePython.py → Python runner (installs dependencies and launches 01)
-- │ └── 01_UseLinux → Linux runner (installs dependencies and launches 01)
+- │ └── 01_UseWindows.bat → Windows launcher (installs dependencies and runs 01)
+- │ └── 01_UsePython.py → Python launcher (installs dependencies and runs 01)
+- │ └── 01_UseLinux → Linux launcher (installs dependencies and runs 01)
 - ├── Art/
 - │ └── Nameplate → DDoS ASCII art
-- │ └── Figlet → Preview of figlet fonts used in the code
-- └── README.md → This file
+- │ └── Figlet → Preview of figlet fonts generated in the code
+- └── README.md → English introduction
+- └── README–Chinese.md → Chinese introduction
+- └── LICENSE → License
 
 ---
 
-## Requirements
+## Environment Requirements
 
-- **Python 3.6+** (3.9+ recommended)
-- Operating system: Linux, Windows, macOS, Android (Termux)
-- Required tools: `git` (to clone the repository), `figlet` (for the ASCII art banner)
+- **Python 3.6+** (recommended 3.9+)
+- Operating System: Linux, Windows, macOS, Android (Termux)
+- Dependencies: `git` for cloning the repository, `figlet` for generating ASCII art banners
 
 ## License
-
-- This repository is released under the `GPLv3` open source license.
+– This repository uses `GPLv3` as its open-source license.
