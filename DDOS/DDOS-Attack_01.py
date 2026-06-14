@@ -51,7 +51,7 @@ user_provided_port = False
 target_port = None
 while True:
     try:
-        port_str = input("Port (press Enter to use auto-discovery): ").strip()
+        port_str = input("[?]Port (press Enter to use auto-discovery): ").strip()
         if port_str == "":
             target_port = None
             break
