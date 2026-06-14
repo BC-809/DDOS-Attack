@@ -114,7 +114,7 @@ if use_fragmentation:
 if random_target_port:
     print("[*] 随机目标端口模式已启用")
 
-# ==================== 端口探测函数（支持大量扫描） ====================
+# ==================== 端口探测函数（支持大量扫描，实时输出端口） ====================
 
 def check_target(ip, port):
     """简单 TCP 连接测试，返回 True/False"""
@@ -128,10 +128,11 @@ def check_target(ip, port):
         return False
 
 def discover_open_port(ip, port_range):
-    """扫描端口范围，返回第一个开放的端口号"""
+    """扫描端口范围，返回第一个开放的端口号，同时显示正在探测的端口"""
     print(f"[*] 正在扫描端口 {min(port_range)}-{max(port_range)}，请耐心等待...")
     try:
         for p in port_range:
+            print(f"[>] 正在探测端口: {p}")
             if check_target(ip, p):
                 return p
     except KeyboardInterrupt:
