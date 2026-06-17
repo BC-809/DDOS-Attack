@@ -28,9 +28,14 @@
 
 ## Project Structure
 - ├── DDOS/
-- │ └── DDOS-Attack_01.py → Attack code file
-- │ └── DDOS-Attack_02.py → Quick version (skips ASCII art loading)
-- │ └── DDOS-Attack_03.py → Version with spoofed source IP support (requires ROOT privileges)
+- │ └── Chinese/
+- │    └── DDOS-Attack_01.py → Attack code file, Chinese version
+- │    └── DDOS-Attack_02.py → Quick version (skips ASCII art loading), Chinese
+- │    └── DDOS-Attack_03.py → Version with spoofed source IP (requires ROOT privileges), Chinese
+- │ └── English/
+- │    └── DDOS-Attack_01.py → Attack code file, English version
+- │    └── DDOS-Attack_02.py → Quick version (skips ASCII art loading), English
+- │    └── DDOS-Attack_03.py → Version with spoofed source IP (requires ROOT privileges), English
 - ├── Launcher/
 - │ └── 01_UseWindows.bat → Windows launcher (installs dependencies and runs 01)
 - │ └── 01_UsePython.py → Python launcher (installs dependencies and runs 01)
