@@ -29,17 +29,17 @@
 ## Project Structure
 - ├── DDOS/
 - │ └── Chinese/
-- │    └── DDOS-Attack_01.py → Attack code file, Chinese version
-- │    └── DDOS-Attack_02.py → Quick version (skips ASCII art loading), Chinese
-- │    └── DDOS-Attack_03.py → Version with spoofed source IP (requires ROOT privileges), Chinese
+- │ └── DDOS-Attack_01_c.py → Attack code file, Chinese version
+- │ └── DDOS-Attack_02_c.py → Quick version (skips ASCII art loading), Chinese
+- │ └── DDOS-Attack_03_c.py → Version with spoofed source IP (requires ROOT privileges), Chinese
 - │ └── English/
-- │    └── DDOS-Attack_01.py → Attack code file, English version
-- │    └── DDOS-Attack_02.py → Quick version (skips ASCII art loading), English
-- │    └── DDOS-Attack_03.py → Version with spoofed source IP (requires ROOT privileges), English
+- │ └── DDOS-Attack_01_e.py → Attack code file, English version
+- │ └── DDOS-Attack_02_e.py → Quick version (skips ASCII art loading), English
+- │ └── DDOS-Attack_03_e.py → Version with spoofed source IP (requires ROOT privileges), English
 - ├── Launcher/
-- │ └── 01_UseWindows.bat → Windows launcher (installs dependencies and runs 01)
-- │ └── 01_UsePython.py → Python launcher (installs dependencies and runs 01)
-- │ └── 01_UseLinux → Linux launcher (installs dependencies and runs 01)
+- │ └── 01_UseWindows.bat → Windows launcher (installs required files and runs 01)
+- │ └── 01_UsePython.py → Python launcher (installs required files and runs 01)
+- │ └── 01_UseLinux → Linux launcher (installs required files and runs 01)
 - ├── Art/
 - │ └── Nameplate → DDoS ASCII art
 - │ └── Figlet → Preview of figlet fonts generated in the code
