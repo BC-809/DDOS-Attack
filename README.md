@@ -56,4 +56,4 @@
 - Dependencies: `git` for cloning the repository, `figlet` for generating ASCII art banners
 
 ## License
-– This repository uses `GPLv3` as its open-source license.
+- This repository uses `GPLv3` as its open-source license.
