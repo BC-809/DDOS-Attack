@@ -54,7 +54,7 @@ def main():
     print("\n" + "=" * 60)
     print("  部署完成，即将启动 DDOS-Attack 脚本...")
     print("=" * 60)
-    run_cmd("python DDOS/DDOS-Attack_01.py")
+    run_cmd("python DDOS/English/DDOS-Attack_01_e.py")
 
 if __name__ == "__main__":
     main()
