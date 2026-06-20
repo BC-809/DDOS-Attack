@@ -38,7 +38,7 @@
 - │ └── DDOS-Attack_03_e.py → Version with spoofed source IP (requires ROOT privileges), English
 - ├── Launcher/
 - │ └── 01_UseWindows.bat → Windows launcher (installs required files and runs 01)
-- │ └── 01_UsePython.py → Python launcher (installs required files and runs 01)
+- │ └── 01_UsePython.py → Python Android launcher (installs required files at runtime and launches 01)
 - │ └── 01_UseLinux → Linux launcher (installs required files and runs 01)
 - ├── Art/
 - │ └── Nameplate → DDoS ASCII art
