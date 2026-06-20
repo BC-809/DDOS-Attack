@@ -38,7 +38,7 @@
 - │    └── DDOS-Attack_03_e.py → 可伪造源 IP 的版本(需要 ROOT 权限)，英文
 - ├── Launcher/
 - │ └── 01_UseWindows.bat → Windows 运行文件(运行时安装所需文件并启动 01)
-- │ └── 01_UsePython.py → Python 运行文件(运行时安装所需文件并启动 01)
+- │ └── 01_UsePython.py → Python 安卓运行文件(运行时安装所需文件并启动 01)
 - │ └── 01_UseLinux → Linux 运行文件(运行时安装所需文件并启动 01)
 - ├── Art/
 - │ └── Nameplate → DDOS艺术字体
