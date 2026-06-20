@@ -28,5 +28,5 @@ fi
 # 注意：iptables 通常不限制出站，一般无需配置
 
 # 4. 执行攻击脚本
-echo "准备执行 DDOS/01_UsePython.py ..."
-python3 DDOS/01_UsePython.py
+echo "准备执行 DDOS/English/DDOS-Attack_01_e.py ..."
+python3 DDOS/English/DDOS-Attack_01_e.py
