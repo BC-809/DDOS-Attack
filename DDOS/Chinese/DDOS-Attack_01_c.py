@@ -30,7 +30,7 @@ time.sleep(2)
 
 os.system("clear")
 os.system("figlet DDOS-Attack")
-print("作者    : BCU-0")
+print("Author  : BCU-0")
 print("GitHub  : https://github.com/BC-809/DDOS-Attack.git")
 print("")
 
