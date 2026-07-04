@@ -1,4 +1,4 @@
-[中文](README-Chinese.md)
+[<点击查看简体中文>](README-Chinese.md)
 
 # DDOS-Attack - Distributed Denial of Service Attack Simulation Tool
 
@@ -41,9 +41,10 @@
 - │ └── 01_UsePython.py → Python Android launcher (installs required files at runtime and launches 01)
 - │ └── 01_UseLinux → Linux launcher (installs required files and runs 01)
 - ├── Art/
-- │ └── Figlet → Preview of figlet fonts generated in the code
+- │ └── Figlet_DDOS-Attack → Preview of figlet fonts generated in the code(DDOS-Attack)
+- │ └── Figlet_AttackStarting → Preview of figlet fonts generated in the code(AttackStarting)
 - └── README.md → English introduction
-- └── README–Chinese.md → Chinese introduction
+- └── README–Chinepse.md → Chinese introduction
 - └── LICENSE → License
 - └── Nameplate → BC-809-Nameplate
 
