@@ -1,4 +1,4 @@
-[English](README.md)
+[<English>](README.md)
 
 # DDOS-Attack    分布式拒绝服务攻击模拟工具
 
@@ -41,7 +41,8 @@
 - │ └── 01_UsePython.py → Python 安卓运行文件(运行时安装所需文件并启动 01)
 - │ └── 01_UseLinux → Linux 运行文件(运行时安装所需文件并启动 01)
 - ├── Art/
-- │ └── Figlet → 代码中生成的 figlet 字体预览
+- │ └── Figlet_DDOS-Attack → 代码中生成的 figlet 字体预览(DDOS-Attack)
+- │ └── Figlet_AttackStarting → 代码中生成的 figlet 字体预览(AttackStarting)
 - └── README.md → 英文介绍
 - └── README–Chinese.md → 中文介绍
 - └── LICENSE → 来源许可
