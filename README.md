@@ -1,4 +1,4 @@
-[<点击查看简体中文>](README-Chinese.md)
+[<简体中文>](README-Chinese.md)
 
 # DDOS-Attack - Distributed Denial of Service Attack Simulation Tool
 
