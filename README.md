@@ -41,11 +41,11 @@
 - │ └── 01_UsePython.py → Python Android launcher (installs required files at runtime and launches 01)
 - │ └── 01_UseLinux → Linux launcher (installs required files and runs 01)
 - ├── Art/
-- │ └── Nameplate → DDoS ASCII art
 - │ └── Figlet → Preview of figlet fonts generated in the code
 - └── README.md → English introduction
 - └── README–Chinese.md → Chinese introduction
 - └── LICENSE → License
+- └── Nameplate → BC-809-Nameplate
 
 ---
 
