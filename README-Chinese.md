@@ -56,5 +56,7 @@
 - 操作系统：Linux、Windows、macOS、Android（Termux）
 - 依赖工具：`git` 用于克隆仓库，`figlet` 用于生成艺术字标题
 
+---
+
 ## 来源协议
 - 本仓库使用`GPLv3`作为开源协议
