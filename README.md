@@ -29,24 +29,24 @@
 ## Project Structure
 - ├── DDOS/
 - │ └── Chinese/
-- │ └── DDOS-Attack_01_c.py → Attack code file, Chinese version
+- │ └── DDOS-Attack_01_c.py → Attack code file, Chinese
 - │ └── DDOS-Attack_02_c.py → Quick version (skips ASCII art loading), Chinese
 - │ └── DDOS-Attack_03_c.py → Version with spoofed source IP (requires ROOT privileges), Chinese
 - │ └── English/
-- │ └── DDOS-Attack_01_e.py → Attack code file, English version
+- │ └── DDOS-Attack_01_e.py → Attack code file, English
 - │ └── DDOS-Attack_02_e.py → Quick version (skips ASCII art loading), English
 - │ └── DDOS-Attack_03_e.py → Version with spoofed source IP (requires ROOT privileges), English
 - ├── Launcher/
-- │ └── 01_UseWindows.bat → Windows launcher (installs required files and runs 01)
-- │ └── 01_UsePython.py → Python Android launcher (installs required files at runtime and launches 01)
-- │ └── 01_UseLinux → Linux launcher (installs required files and runs 01)
+- │ └── LauncherWindows.bat → Windows launcher (installs required files)
+- │ └── LauncherPython.py → Python Android launcher (installs required files at runtime)
+- │ └── LauncherLinux → Linux launcher (installs required files)
 - ├── Art/
 - │ └── Figlet_DDOS-Attack → Preview of figlet fonts generated in the code(DDOS-Attack)
 - │ └── Figlet_AttackStarting → Preview of figlet fonts generated in the code(AttackStarting)
 - └── README.md → English introduction
 - └── README–Chinepse.md → Chinese introduction
 - └── LICENSE → License
-- └── Nameplate → BC-809-Nameplate
+- └── Nameplate → BZ-XXX-Nameplate
 
 ---
 
