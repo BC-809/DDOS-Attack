@@ -36,9 +36,12 @@ def main():
 
     os.chdir("DDOS-Attack")
 
-    # 运行攻击脚本（英文版 01）
-    print("[*] Starting attack script...")
-    run_cmd("python DDOS/English/DDOS-Attack_01_e.py")
+    # 提示用户手动启动
+    print("\n" + "=" * 40)
+    print("  Setup complete!")
+    print("  Run the attack script manually:")
+    print("  python DDOS/English/DDOS-Attack_01_e.py")
+    print("=" * 40)
 
 if __name__ == "__main__":
     main()
