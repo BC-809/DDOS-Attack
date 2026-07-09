@@ -37,16 +37,16 @@
 - │    └── DDOS-Attack_02_e.py → 快捷版(省去了艺术字体加载)，英文
 - │    └── DDOS-Attack_03_e.py → 可伪造源 IP 的版本(需要 ROOT 权限)，英文
 - ├── Launcher/
-- │ └── 01_UseWindows.bat → Windows 运行文件(运行时安装所需文件并启动 01)
-- │ └── 01_UsePython.py → Python 安卓运行文件(运行时安装所需文件并启动 01)
-- │ └── 01_UseLinux → Linux 运行文件(运行时安装所需文件并启动 01)
+- │ └── LauncherWindows.bat → Windows 运行文件(运行时安装所需文件)
+- │ └── LauncherPython.py → Python 安卓运行文件(运行时安装所需文件)
+- │ └── LauncherLinux → Linux 运行文件(运行时安装所需文件)
 - ├── Art/
 - │ └── Figlet_DDOS-Attack → 代码中生成的 figlet 字体预览(DDOS-Attack)
-- │ └── Figlet_AttackStarting → 代码中生成的 figlet 字体预览(AttackStarting)
+- │ └── Figlet_AttackStarting → 代码中生成的 figlet 字体预览(Attack Starting)
 - └── README.md → 英文介绍
 - └── README–Chinese.md → 中文介绍
 - └── LICENSE → 来源许可
-- └── Nameplate → BC-809-铭牌
+- └── Nameplate → BZ-XXX-铭牌
 
 ---
 
