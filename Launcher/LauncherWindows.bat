@@ -1,6 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
-title DDOS-Attack Environment Setup & Run
+title DDOS-Attack Environment Setup
 
 :: Check for administrator privileges
 net session >nul 2>&1
@@ -11,7 +11,7 @@ if %errorlevel% neq 0 (
 )
 
 echo ================================================================
-echo  DDOS-Attack Educational Setup & Run
+echo  DDOS-Attack Educational Setup
 echo  WARNING: Use only in isolated lab with your own devices!
 echo ================================================================
 pause
@@ -84,11 +84,13 @@ if %errorlevel% neq 0 (
     echo [!] Failed to add firewall rule. You may need to run as Administrator.
 )
 
-:: 7. Run the attack script
+:: 7. 提示用户手动启动攻击脚本
 echo.
 echo ================================================================
-echo  Setup complete! Launching DDOS-Attack script (English version)...
+echo  Setup complete!
+echo  To run the attack script manually, use:
+echo    python DDOS\English\DDOS-Attack_01_e.py  (English version)
+echo    python DDOS\Chinese\DDOS-Attack_01_c.py  (Chinese version)
+echo  WARNING: Use only in isolated lab with your own devices!
 echo ================================================================
-"%PYTHON_EXE%" DDOS\English\DDOS-Attack_01_e.py
-
 pause
