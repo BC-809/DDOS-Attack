@@ -26,7 +26,3 @@ if command -v ufw &> /dev/null && sudo ufw status | grep -q "Status: active"; th
     echo "已临时放行常用端口的 UDP 出站流量"
 fi
 # 注意：iptables 通常不限制出站，一般无需配置
-
-# 4. 执行攻击脚本
-echo "准备执行 DDOS/English/DDOS-Attack_01_e.py ..."
-python3 DDOS/English/DDOS-Attack_01_e.py
