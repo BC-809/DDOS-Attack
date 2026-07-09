@@ -1,28 +1,60 @@
 #!/bin/bash
 
-# 1. 安装必要的软件包
-echo "正在安装 Python3, Git, figlet..."
+# ==================== DDOS-Attack Linux 启动器 (仅安装环境) ====================
+
+echo "============================================================"
+echo "  DDOS-Attack Educational Setup (Linux)"
+echo "  WARNING: Use only in isolated lab with your own devices!"
+echo "============================================================"
+
+# 1. 检测并安装必要的软件包
+echo ""
+echo "[*] Installing required packages: python3, python3-pip, git, figlet..."
+
 if command -v apt &> /dev/null; then
     sudo apt update
     sudo apt install -y python3 python3-pip git figlet
 elif command -v yum &> /dev/null; then
     sudo yum install -y python3 python3-pip git figlet
+elif command -v dnf &> /dev/null; then
+    sudo dnf install -y python3 python3-pip git figlet
 elif command -v apk &> /dev/null; then
     sudo apk add python3 py3-pip git figlet
+elif command -v pacman &> /dev/null; then
+    sudo pacman -S --noconfirm python python-pip git figlet
 else
-    echo "无法识别包管理器，请手动安装 python3, git, figlet"
+    echo "[!] 无法识别包管理器，请手动安装 python3, git, figlet"
     exit 1
 fi
 
-# 2. 克隆项目
-echo "正在克隆 DDOS-Attack 仓库..."
-git clone https://github.com/BC-809/DDOS-Attack.git
-cd DDOS-Attack || exit 1
+echo "[*] 依赖安装完成。"
 
-# 3. Linux 防火墙放行 Python（可选，有些系统不需要）
-echo "配置防火墙（如果已启用）..."
-if command -v ufw &> /dev/null && sudo ufw status | grep -q "Status: active"; then
-    sudo ufw allow out from any to any port 53,80,443 proto udp
-    echo "已临时放行常用端口的 UDP 出站流量"
+# 2. 克隆项目仓库
+echo ""
+echo "[*] 正在克隆 DDOS-Attack 仓库..."
+if [ -d "DDOS-Attack" ]; then
+    echo "[*] 目录已存在，跳过克隆。如需更新请手动执行 git pull。"
+else
+    git clone https://github.com/BC-809/DDOS-Attack.git
+    if [ $? -ne 0 ]; then
+        echo "[!] 克隆失败，请检查网络连接。"
+        exit 1
+    fi
 fi
-# 注意：iptables 通常不限制出站，一般无需配置
+
+# 3. 进入项目目录
+cd DDOS-Attack || exit 1
+echo "[*] 已进入项目目录: $(pwd)"
+
+# 4. 提示用户后续操作
+echo ""
+echo "============================================================"
+echo "  环境准备完毕！"
+echo "  请手动运行以下命令启动攻击脚本："
+echo ""
+echo "  cd DDOS-Attack"
+echo "  python3 DDOS/English/DDOS-Attack_01_e.py    (英文版)"
+echo "  python3 DDOS/Chinese/DDOS-Attack_01_c.py    (中文版)"
+echo ""
+echo "  警告：仅限在隔离的实验环境中使用！"
+echo "============================================================"
