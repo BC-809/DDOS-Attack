@@ -40,7 +40,7 @@ print("")
 # Target IP validation
 while True:
     try:
-        ip_str = input("IP Target : ").strip()
+        ip_str = input("[?]IP Target : ").strip()
         ipaddress.ip_address(ip_str)
         target_ip = ip_str
         break
@@ -62,7 +62,7 @@ while True:
 # Total traffic input (in GB)
 while True:
     try:
-        gb_str = input("Total data to send (GB) : ").strip()
+        gb_str = input("[?]Total data to send (GB) : ").strip()
         total_gb = float(gb_str)
         if total_gb <= 0:
             print("[!] Traffic must be greater than 0 GB.")
@@ -74,17 +74,17 @@ while True:
 # Optional rate limit (packet interval)
 rate_limit = 0.0
 try:
-    rate_str = input("Packet interval in seconds (0 = max speed, e.g. 0.1) : ").strip()
+    rate_str = input("[?]Packet interval in seconds (0 = max speed, e.g. 0.1) : ").strip()
     rate_limit = float(rate_str)
 except ValueError:
     rate_limit = 0.0
 
 # ---------- Firewall Bypass Options ----------
 print("\n--- Firewall Bypass Options (experimental) ---")
-src = input("Specify source port (leave blank for random): ").strip()
+src = input("[?]Specify source port (leave blank for random): ").strip()
 source_port = int(src) if src else None
 
-frag = input("Enable IP fragmentation? (y/N): ").strip().lower()
+frag = input("[?]Enable IP fragmentation? (y/N): ").strip().lower()
 use_fragmentation = (frag == 'y')
 
 rnd = input("Use random target port? (y/N): ").strip().lower()
