@@ -32,7 +32,7 @@ class DDoSSimulator:
         """显示法律警告（无艺术字）"""
         os.system('cls' if os.name == 'nt' else 'clear')
         print("=" * 60)
-        print("  DDOS-Attack 教育版 (防火墙绕过实验) v3.0")
+        print("  DDOS-Attack 教育版 (防火墙绕过实验) ")
         print("=" * 60)
         print("法律警告：")
         print("本工具仅用于教育目的，必须在完全隔离的实验室环境中使用。")
@@ -46,7 +46,7 @@ class DDoSSimulator:
         # ---------- 目标 IP ----------
         while True:
             try:
-                ip_str = input("请输入目标 IP 地址: ").strip()
+                ip_str = input("[?]请输入目标 IP 地址: ").strip()
                 ipaddress.ip_address(ip_str)
                 self.target_ip = ip_str
                 break
@@ -56,7 +56,7 @@ class DDoSSimulator:
         # ---------- 目标端口（支持留空）----------
         while True:
             try:
-                port_str = input("请输入目标端口 (直接回车自动探测): ").strip()
+                port_str = input("[?]请输入目标端口 (直接回车自动探测): ").strip()
                 if port_str == "":
                     self.target_port = None
                     self.user_provided_port = False
@@ -74,7 +74,7 @@ class DDoSSimulator:
         # ---------- 总流量 (GB) ----------
         while True:
             try:
-                gb_str = input("请输入要发送的总数据量 (GB): ").strip()
+                gb_str = input("[?]请输入要发送的总数据量 (GB): ").strip()
                 self.total_gb = float(gb_str)
                 if self.total_gb <= 0:
                     print("[!] 流量必须大于 0 GB。")
@@ -85,20 +85,20 @@ class DDoSSimulator:
 
         # ---------- 发包间隔 (速率限制) ----------
         try:
-            rate_str = input("请输入发包间隔（秒，0 表示不限速，例如 0.1）: ").strip()
+            rate_str = input("[?]请输入发包间隔（秒，0 表示不限速，例如 0.1）: ").strip()
             self.rate_limit = float(rate_str)
         except ValueError:
             self.rate_limit = 0.0
 
         # ---------- 绕过选项 ----------
         print("\n--- 防火墙绕过选项 (仅供实验) ---")
-        src = input("指定源端口 (留空则系统随机分配): ").strip()
+        src = input("[?]指定源端口 (留空则系统随机分配): ").strip()
         self.source_port = int(src) if src else None
 
-        frag = input("启用 IP 分片? (y/N): ").strip().lower()
+        frag = input("[?]启用 IP 分片? (y/N): ").strip().lower()
         self.use_fragmentation = (frag == 'y')
 
-        rnd = input("使用随机目标端口? (y/N): ").strip().lower()
+        rnd = input("[?]使用随机目标端口? (y/N): ").strip().lower()
         self.random_target_port = (rnd == 'y')
 
         # ---------- 计算总包数 ----------
@@ -198,7 +198,7 @@ class DDoSSimulator:
 
     def _select_scan_range(self):
         """提供扫描模式选择，返回可迭代的端口范围"""
-        print("\n请选择扫描模式：")
+        print("\n[>]请选择扫描模式：")
         print("1. 快速扫描 (常用端口)")
         print("2. 全端口扫描 (1-65535，耗时较长)")
         print("3. 自定义范围")
