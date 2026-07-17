@@ -47,7 +47,7 @@ class DDoSSimulator:
         # ---------- Target IP ----------
         while True:
             try:
-                ip_str = input("Enter target IP address: ").strip()
+                ip_str = input("[?]Enter target IP address: ").strip()
                 ipaddress.ip_address(ip_str)
                 self.target_ip = ip_str
                 break
@@ -57,7 +57,7 @@ class DDoSSimulator:
         # ---------- Target port (supports blank for auto-discovery) ----------
         while True:
             try:
-                port_str = input("Enter target port (press Enter for auto-discovery): ").strip()
+                port_str = input("[?]Enter target port (press Enter for auto-discovery): ").strip()
                 if port_str == "":
                     self.target_port = None
                     self.user_provided_port = False
@@ -86,20 +86,20 @@ class DDoSSimulator:
 
         # ---------- Packet interval (rate limit) ----------
         try:
-            rate_str = input("Enter packet interval in seconds (0 = max speed, e.g. 0.1): ").strip()
+            rate _str = input("[?]Enter packet interval in seconds (0 = max speed, e.g. 0.1): ").strip()
             self.rate_limit = float(rate_str)
         except ValueError:
             self.rate_limit = 0.0
 
         # ---------- Bypass options ----------
         print("\n--- Firewall Bypass Options (experimental) ---")
-        src = input("Specify source port (leave blank for random): ").strip()
+        src = input("[?]Specify source port (leave blank for random): ").strip()
         self.source_port = int(src) if src else None
 
-        frag = input("Enable IP fragmentation? (y/N): ").strip().lower()
+        frag = input("[?]Enable IP fragmentation? (y/N): ").strip().lower()
         self.use_fragmentation = (frag == 'y')
 
-        rnd = input("Use random target port? (y/N): ").strip().lower()
+        rnd = input("[?]Use random target port? (y/N): ").strip().lower()
         self.random_target_port = (rnd == 'y')
 
         # ---------- Calculate total packets ----------
@@ -138,7 +138,7 @@ class DDoSSimulator:
         print(f"[*] Scanning ports {min(port_range)}-{max(port_range)}, please wait...")
         try:
             for p in port_range:
-                print(f"[>] Probing port: {p}")
+                print(f"[?] Probing port: {p}")
                 if self.check_target(ip, p):
                     return p
         except KeyboardInterrupt:
@@ -199,7 +199,7 @@ class DDoSSimulator:
 
     def _select_scan_range(self):
         """Provide scan mode selection, return iterable port range"""
-        print("\nSelect scan mode:")
+        print("\n[?]Select scan mode:")
         print("1. Quick scan (common ports)")
         print("2. Full port scan (1-65535, time-consuming)")
         print("3. Custom range")
