@@ -151,7 +151,7 @@ if target_port is not None and user_provided_port:
         print(f"[!] Port {target_port} is unreachable.")
         scan_choice = input("[?] Start port scan to find an available port? (y/n): ").strip().lower()
         if scan_choice == 'y':
-            print("\nSelect scan mode:")
+            print("\n[?]Select scan mode:")
             print("1. Quick scan (common ports)")
             print("2. Full port scan (1-65535, time-consuming)")
             print("3. Custom range")
