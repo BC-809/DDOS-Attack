@@ -39,7 +39,7 @@ print(r"|____/|____/ \___/|____/     /_/   \_\__|\__\__,_|\___|_|\_\ ")
 print("Author  : BCU-0")
 print("GitHub  : https://github.com/BC-809/DDOS-Attack.git")
 print("")
-print("Minecraft Java Edition 假人攻击模块")
+print("Minecraft Java Edition 假人攻击")
 print("")
 
 # ==================== 参数输入 ====================
