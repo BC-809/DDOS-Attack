@@ -12,7 +12,7 @@ import random
 
 # ====================== 清屏函数 ======================
 def clear_screen():
-# 清屏，兼容 Windows (cls) 和 Unix-like (clear)
+    # 清屏，兼容 Windows (cls) 和 Unix-like (clear)
     os.system('cls' if os.name == 'nt' else 'clear')
 
 # ======================= 打印艺术字与法律警告 =======================
