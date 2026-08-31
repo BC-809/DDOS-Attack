@@ -6,7 +6,7 @@ import ipaddress
 import random
 
 class DDoSSimulator:
-    """UDP 数据包发送模拟器 (整合自动端口探测)"""
+# UDP 数据包发送模拟器 (整合自动端口探测)
 
     def __init__(self):
         self.target_ip = None
@@ -29,7 +29,7 @@ class DDoSSimulator:
         self.final_port = None
 
     def show_banner(self):
-        """显示法律警告（无艺术字）"""
+        # 显示法律警告
         os.system('cls' if os.name == 'nt' else 'clear')
         print("=" * 60)
         print("  DDOS-Attack 教育版 (防火墙绕过实验) ")
@@ -42,7 +42,7 @@ class DDoSSimulator:
         input("按回车键继续，或按 Ctrl+C 退出...")
 
     def get_target_info(self):
-        """获取并验证目标 IP、端口、流量、速率限制及绕过选项（不进行扫描）"""
+        # 获取并验证目标 IP、端口、流量、速率限制及绕过选项（不进行扫描）
         # ---------- 目标 IP ----------
         while True:
             try:
