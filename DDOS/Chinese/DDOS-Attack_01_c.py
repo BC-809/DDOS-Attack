@@ -27,9 +27,9 @@ print("M  MMMM   M M  MMMM   M M   MMM   M M   MMM   M   BC-809")
 print("M        MM M        MM MMM     MMM MM       MM   BC-809")
 print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809")
 print("\n")
-print("======================= 警告 =======================")
+print("==================== 警告 ====================")
 print("你已经触碰到了法律底线，请立即退出，或等待3秒启动程序")
-print("===================================================")
+print("=============================================")
 print("\n")
 time.sleep(1)
 print("3")
@@ -117,15 +117,15 @@ else:
 
 total_bytes = int(total_gb * 1024 * 1024 * 1024)
 max_packets = total_bytes // PACKET_SIZE
-print(f"\n[*] 将发送 {max_packets} 个数据包，总计 {total_gb:.2f} GB。")
+print(f"\n[>] 将发送 {max_packets} 个数据包，总计 {total_gb:.2f} GB。")
 if rate_limit > 0:
-    print(f"[*] 发包间隔: {rate_limit} 秒")
+    print(f"[>] 发包间隔: {rate_limit} 秒")
 if source_port is not None:
-    print(f"[*] 源端口: {source_port}")
+    print(f"[>] 源端口: {source_port}")
 if use_fragmentation:
-    print(f"[*] IP 分片已启用，单包载荷 {PACKET_SIZE} 字节")
+    print(f"[>] IP 分片已启用，单包载荷 {PACKET_SIZE} 字节")
 if random_target_port:
-    print("[*] 随机目标端口模式已启用")
+    print("[>] 随机目标端口模式已启用")
 
 # ==================== 端口探测函数（支持大量扫描，实时输出端口） ====================
 
@@ -140,8 +140,8 @@ def check_target(ip, port):
     except (socket.timeout, ConnectionRefusedError, OSError):
         return False
 
-def discover_open_port(ip, port_range):
-    """扫描端口范围，返回第一个开放的端口号，同时显示正在探测的端口"""
+def discover_open_port(ip, port_range)
+    # 扫描端口范围，返回第一个开放的端口号，同时显示正在探测的端口
     print(f"[>] 正在扫描端口 {min(port_range)}-{max(port_range)}，请耐心等待...")
     try:
         for p in port_range:
@@ -249,7 +249,7 @@ else:
     if final_port is None:
         print("[!] 未探测到任何开放端口，且用户未指定端口，攻击无法继续。")
         sys.exit(1)
-    print(f"[+] 探测成功，将使用开放端口: {final_port}")
+    print(f"[>] 探测成功，将使用开放端口: {final_port}")
 
 # ==================== 显示攻击启动画面 ====================
 
@@ -267,7 +267,7 @@ while True:
         print("[>] 用户取消。")
         sys.exit(0)
     else:
-        print("[!] 请输入 yes 或 no。")
+        print("[?] 请输入 yes 或 no。")
 
 # ==================== 攻击发送循环 ====================
 
@@ -331,7 +331,7 @@ try:
             time.sleep(rate_limit)
 
 except KeyboardInterrupt:
-    print("\n[!] 用户手动停止发送。")
+    print("\n[>] 用户手动停止发送。")
 except Exception as e:
     print(f"\n[!] 错误: {e}")
 finally:
