@@ -80,11 +80,14 @@ static void show_banner(void) {
     int ret = system("figlet DDOS-Attack 2>nul");
     if (ret != 0) {
         // 如果 figlet 不可用，使用 ASCII 降级方案
-        printf(" ____  ____   ___  ____          _   _   _             _     \n");
-        printf("|  _ \\|  _ \\ / _ \\/ ___|        / \\ | |_| |_ __ _  ___| | __ \n");
-        printf("| | | | | | | | | \\___ \\ _____ / _ \\| __| __/ _` |/ __| |/ / \n");
-        printf("| |_| | |_| | |_| |___) |_____/ ___ \\ |_| || (_| | (__|   <  \n");
-        printf("|____/|____/ \\___/|____/     /_/   \\_\\__|\\__\\__,_|\\___|_|\\_\\ \n");
+        printf("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809\n")
+        printf("M       MMM M       MMM MMM     MMM MM       MM   BC-809\n")
+        printf("M  MMMM   M M  MMMM   M M   MMM   M M  MMMMM  M   BC-809\n")
+        printf("M  MMMMM  M M  MMMMM  M M  MMMMM  M M        MM   BC-809\n")
+        printf("M  MMMMM  M M  MMMMM  M M  MMMMM  M MMMMMMM   M   BC-809\n")
+        printf("M  MMMM   M M  MMMM   M M   MMM   M M   MMM   M   BC-809\n")
+        printf("M        MM M        MM MMM     MMM MM       MM   BC-809\n")
+        printf("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809\n")
     }
     printf("作者  : BCU-0\n");
     printf("GitHub: https://github.com/BC-809/DDOS-Attack.git\n\n");
