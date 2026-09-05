@@ -88,9 +88,8 @@ static void show_banner(void) {
     printf("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809\n");
     printf("\n");
     
-    printf("==================== 警告 =======================\n");
-    printf("你正在跨越法律和道德的边界。\n");
-    printf("请立即退出，或等待 3 秒后启动。\n");
+    printf("======================= 警告 ========================\n");
+    printf("你正在跨越法律和道德的边界。请立即退出，或等待 3 秒后启动。\n");
     printf("====================================================\n");
     Sleep(1000);
     for (int i = 3; i > 0; i--) {
