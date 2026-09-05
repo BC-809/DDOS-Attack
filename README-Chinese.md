@@ -72,6 +72,7 @@ DDOS-Attack/
 │   │   ├── DDOS-Attack_03_c.py      → 可伪造源 IP 版本（需 ROOT 权限），中文
 │   │   ├── DDOS-Attack_05_c.c       → C 语言高性能版本，仅适用于 Windows ，中文
 │   │   ├── DDOS-Attack_06_c.java    → Java 高性能版本，中文
+│   │   └── DDOS-Attack_07_c.c       → C 语言高性能版本，仅适用于 Linux ，中文
 │   └── English/
 │        ├── DDOS-Attack_01_e.py      → 攻击代码文件（完整版），英文
 │        ├── DDOS-Attack_02_e.py      → 快捷版（省去艺术字体加载），英文
