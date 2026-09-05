@@ -84,8 +84,7 @@ DDOS-Attack/
 ├── Art/
 │   ├── Figlet_DDOS-Attack           → figlet 字体预览（DDOS-Attack）
 │   └── Figlet_AttackStarting        → figlet 字体预览（Attack Starting）
-├── README.md                        → 英文介绍
-├── README-Chinese.md                → 中文介绍
+├── README.md                        → 中文介绍
 ├── LICENSE                          → 开源许可（GPLv3）
 └── Nameplate                        → BC-809 铭牌
 ```
