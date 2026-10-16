@@ -140,14 +140,14 @@ public class DDOSAttack {
     // 用法帮助
     // ===================================================================
     private static void printUsage() {
-        System.out.println("用法: java DDOSAttack -t <IP> -p <PORT> -g <GB> [选项]");
+        System.out.println("[+]用法: java DDOSAttack -t <IP> -p <PORT> -g <GB> [选项]");
         System.out.println();
-        System.out.println("必填参数:");
+        System.out.println("[+]必填参数:");
         System.out.println("  -t, --target        目标 IP 地址");
         System.out.println("  -p, --port          目标 UDP 端口");
         System.out.println("  -g, --gb            总流量（GB）");
         System.out.println();
-        System.out.println("可选参数:");
+        System.out.println("[+]可选参数:");
         System.out.println("  -P, --processes     线程数（默认 4）");
         System.out.println("  -b, --burst         每突发包数（默认 50）");
         System.out.println("  -r, --rate          速率限制（秒/突发，默认 0）");
@@ -159,7 +159,7 @@ public class DDOSAttack {
         System.out.println("      --max-retries   最大重试次数（默认 3）");
         System.out.println("  -h, --help          显示本帮助");
         System.out.println();
-        System.out.println("示例:");
+        System.out.println("[+]示例:");
         System.out.println("  java DDOSAttack -t 192.168.1.100 -p 53 -g 1 -P 4 -b 50");
         System.out.println("  java DDOSAttack -t 10.0.0.1 -p 80 -g 0.5 -P 8 --random-port -d 30");
     }
