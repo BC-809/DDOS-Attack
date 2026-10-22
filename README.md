@@ -124,6 +124,7 @@ DDOS-Attack/
 所有版本均支持以下通用参数：
 
 参数 说明 默认值
+```
 - -t, --target 目标 IP 地址 必填
 - -p, --port 目标 UDP 端口 必填
 - -g, --gb 总流量（GB） 必填
@@ -140,7 +141,7 @@ DDOS-Attack/
 - --max-retries 最大重试次数 3
 - --no-prealloc 禁用预分配（C/Java） 关闭
 - -h, --help 显示帮助 -
-
+```
 ---
 
 ## 性能对比
