@@ -44,7 +44,7 @@ time.sleep(1)
 
 clear_screen()
 os.system("figlet DDOS-Attack")
-print("Author  : BCU-0")
+print("Author  : Su-StackTrace")
 print("GitHub  : https://github.com/BC-809/DDOS-Attack.git")
 print("")
 
