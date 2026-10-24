@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.LongAdder;
 /**
  *
  * 用法示例：
- *   java DDOSAttack -t 192.168.1.100 -p 53 -g 1 -P 4 -b 50
- *   java DDOSAttack -t 10.0.0.1 -p 80 -g 0.5 -P 8 --random-port -d 30
+ *   java DDOS-Attack_06_c.java -t 192.168.1.100 -p 53 -g 1 -P 4 -b 50
+ *   java DDOS-Attack_06_c.java -t 10.0.0.1 -p 80 -g 0.5 -P 8 --random-port -d 30
  *
  * 参数说明：
  *   -t, --target        目标 IP 地址（必填）
