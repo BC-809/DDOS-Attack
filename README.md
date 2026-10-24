@@ -78,9 +78,9 @@ DDOS-Attack/
 │        ├── DDOS-Attack_02_e.py      → 快捷版（省去艺术字体加载），英文
 │        └── DDOS-Attack_03_e.py      → 可伪造源 IP 版本（需 ROOT 权限），英文
 ├── Launcher/
-│   ├── LauncherWindows.bat          → Windows 运行文件（自动安装依赖）
-│   ├── LauncherPython.py            → Python 安卓运行文件（自动安装依赖）
-│   └── LauncherLinux                → Linux 运行文件（自动安装依赖）
+│   ├── LauncherWindows.bat          → Windows 运行文件（自动安装依赖）(v15未更新，预计v16更新)
+│   ├── LauncherPython.py            → Python 安卓运行文件（自动安装依赖）(v15未更新，预计v16更新)
+│   └── LauncherLinux                → Linux 运行文件（自动安装依赖）(v15未更新，预计v16更新)
 ├── Art/
 │   ├── Figlet_DDOS-Attack           → figlet 字体预览（DDOS-Attack）
 │   └── Figlet_AttackStarting        → figlet 字体预览（Attack Starting）
