@@ -78,14 +78,14 @@ static void show_banner(void) {
     clear_screen();
     
     // ================== 警告页面 ===================
-    printf("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809\n");
-    printf("M       MMM M       MMM MMM     MMM MM       MM   BC-809\n");
-    printf("M  MMMM   M M  MMMM   M M   MMM   M M  MMMMM  M   BC-809\n");
-    printf("M  MMMMM  M M  MMMMM  M M  MMMMM  M M        MM   BC-809\n");
-    printf("M  MMMMM  M M  MMMMM  M M  MMMMM  M MMMMMMM   M   BC-809\n");
-    printf("M  MMMM   M M  MMMM   M M   MMM   M M   MMM   M   BC-809\n");
-    printf("M        MM M        MM MMM     MMM MM       MM   BC-809\n");
-    printf("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   BC-809\n");
+    printf("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   Sucodesu\n");
+    printf("M       MMM M       MMM MMM     MMM MM       MM   Sucodesu\n");
+    printf("M  MMMM   M M  MMMM   M M   MMM   M M  MMMMM  M   Sucodesu\n");
+    printf("M  MMMMM  M M  MMMMM  M M  MMMMM  M M        MM   Sucodesu\n");
+    printf("M  MMMMM  M M  MMMMM  M M  MMMMM  M MMMMMMM   M   Sucodesu\n");
+    printf("M  MMMM   M M  MMMM   M M   MMM   M M   MMM   M   Sucodesu\n");
+    printf("M        MM M        MM MMM     MMM MM       MM   Sucodesu\n");
+    printf("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   Sucodesu\n");
     printf("\n");
     
     printf("======================= 警告 ========================\n");
