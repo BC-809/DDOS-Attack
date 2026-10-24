@@ -112,7 +112,7 @@ static void show_banner(void) {
         printf(r"| |_| | |_| | |_| |___) |_____/ ___ \ |_| || (_| | (__|   <  \n");
         printf(r"|____/|____/ \___/|____/     /_/   \_\__|\__\__,_|\___|_|\_\ \n");
     }
-    printf("作者  : BCU-0\n");
+    printf("作者  : Su-StackTrace\n");
     printf("GitHub: https://github.com/BC-809/DDOS-Attack.git\n\n");
 }
 
