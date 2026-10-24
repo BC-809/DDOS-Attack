@@ -86,7 +86,7 @@ DDOS-Attack/
 │   └── Figlet_AttackStarting        → figlet 字体预览（Attack Starting）
 ├── README.md                        → 中文介绍
 ├── LICENSE                          → 开源许可（GPLv3）
-└── Nameplate                        → BC-809 铭牌
+└── Nameplate                        → Sucodesu 铭牌
 ```
 
 ---
