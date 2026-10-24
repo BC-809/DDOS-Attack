@@ -113,7 +113,7 @@ static void show_banner(void) {
         printf(r"|____/|____/ \___/|____/     /_/   \_\__|\__\__,_|\___|_|\_\ \n");
     }
     printf("作者  : Su-StackTrace\n");
-    printf("GitHub: https://github.com/BC-809/DDOS-Attack.git\n\n");
+    printf("GitHub: https://github.com/BC-809/DDoS-Attack_t3g85hxb670.git\n\n");
 }
 
 // ======================== 内置参数解析（不依赖 getopt） ========================
