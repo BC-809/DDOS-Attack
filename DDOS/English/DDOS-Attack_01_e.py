@@ -45,7 +45,7 @@ time.sleep(1)
 clear_screen()
 os.system("figlet DDOS-Attack")
 print("Author  : Su-StackTrace")
-print("GitHub  : https://github.com/BC-809/DDOS-Attack.git")
+print("GitHub  : https://github.com/BC-809/DDoS-Attack_t3g85hxb670.git")
 print("")
 
 # ==================== Parameter input and validation ====================
